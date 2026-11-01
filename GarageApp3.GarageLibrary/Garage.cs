@@ -154,12 +154,18 @@ namespace GarageApp3.GarageLibrary
             }
         }
 
-        public void WriteVehicleTypeCount(VehicleType vehicleType)
+        public void WriteVehicleTypes(TextWriter textWriter)
         {
-            var count = CountVehicleType(vehicleType);
+            var vehicleTypes = Enum.GetValues(typeof(VehicleType)).Cast<VehicleType>();
 
-            Console.WriteLine($"Vehicle type: {vehicleType}");
-            Console.WriteLine($"Count: {count}");
+            foreach (var vehicleType in vehicleTypes)
+            {
+                var count = CountVehicleType(vehicleType);
+
+                textWriter.WriteLine($"Vehicle type: {vehicleType}");
+                textWriter.WriteLine($"Count: {count}");
+                textWriter.WriteLine();
+            }
         }
     }
 }

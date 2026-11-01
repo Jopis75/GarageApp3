@@ -36,6 +36,6 @@ namespace GarageApp3.GarageLibrary.Interfaces
 
         void WriteVehicles(TextWriter textWriter);
 
-        void WriteVehicleTypeCount(VehicleType vehicleType);
+        void WriteVehicleTypes(TextWriter textWriter);
     }
 }
