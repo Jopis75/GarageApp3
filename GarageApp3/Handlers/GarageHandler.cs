@@ -10,7 +10,7 @@ namespace GarageApp3.Handlers
     public class GarageHandler<TVehicle> : IGarageHandler<TVehicle>
         where TVehicle : Vehicle
     {
-        private Garage<TVehicle> _garage;
+        private Garage<TVehicle>? _garage = null;
 
         public void HandleAddVehicle()
         {
@@ -340,7 +340,7 @@ namespace GarageApp3.Handlers
 
             if (string.IsNullOrEmpty(path) == false)
             {
-                var vehicles = GarageStreamReader.Read(path!);
+                var vehicles = GarageCsvStreamReader.Read(path!);
 
                 if (vehicles.Count == 0)
                 {
@@ -490,7 +490,7 @@ namespace GarageApp3.Handlers
                 {
                     Console.WriteLine();
 
-                    var vehiclesCount = GarageStreamWriter<TVehicle>.Write(streamWriter, _garage);
+                    var vehiclesCount = GarageCsvStreamWriter<TVehicle>.Write(streamWriter, _garage);
 
                     if (vehiclesCount > 0)
                     {

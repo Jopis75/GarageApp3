@@ -2,7 +2,7 @@
 
 namespace GarageApp3.GarageLibrary.IO
 {
-    public static class GarageStreamReader
+    public static class GarageCsvStreamReader
     {
         public static IList<Vehicle> Read(string path)
         {
@@ -10,7 +10,7 @@ namespace GarageApp3.GarageLibrary.IO
 
             var lines = streamReader.ReadAllLines();
 
-            var vehicles = VehicleLineParser.Parse(lines);
+            var vehicles = VehicleCsvLineParser.Parse(lines);
 
             return vehicles;
         }

@@ -5,7 +5,7 @@ using GarageApp3.Handlers;
 
 try
 {
-    var vehicles = GarageStreamReader.Read(@"C:\Users\johan\source\repos\GarageApp3\GarageApp3\SampleVehicles.txt");
+    var vehicles = GarageCsvStreamReader.Read(@"C:\Users\johan\source\repos\GarageApp3\GarageApp3\SampleVehicles.txt");
 
     var garageHandler = new GarageHandler<Vehicle>();
 

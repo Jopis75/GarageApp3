@@ -2,7 +2,7 @@
 
 namespace GarageApp3.GarageLibrary.IO
 {
-    public static class GarageStreamWriter<TVehicle>
+    public static class GarageCsvStreamWriter<TVehicle>
         where TVehicle : Vehicle
     {
         public static int Write(StreamWriter streamWriter, IGarage<TVehicle> garage)

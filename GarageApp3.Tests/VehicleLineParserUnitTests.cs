@@ -20,7 +20,7 @@ namespace GarageApp3.Tests
             var lines = _lines;
 
             // Act
-            var vehicles = VehicleLineParser.Parse(_lines);
+            var vehicles = VehicleCsvLineParser.Parse(_lines);
 
             // Assert
             Assert.Equal(4, vehicles.Count);
@@ -45,7 +45,7 @@ namespace GarageApp3.Tests
             var line = _lines[2];
 
             // Act
-            var vehicle = VehicleLineParser.Parse(line);
+            var vehicle = VehicleCsvLineParser.Parse(line);
 
             // Assert
             Assert.Equal(VehicleType.Car.ToString(), vehicle.GetType().Name);
