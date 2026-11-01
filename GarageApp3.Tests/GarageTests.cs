@@ -4,7 +4,7 @@ using GarageApp3.GarageLibrary.Interfaces;
 
 namespace GarageApp3.Tests
 {
-    public class GarageUnitTests
+    public class GarageTests
     {
         private readonly Vehicle[] _vehicles =  
         {
@@ -15,10 +15,10 @@ namespace GarageApp3.Tests
         };
 
         [Fact]
-        public void TestAddVehicle()
+        public void AddVehicle_ReturnsTrue()
         {
             // Arrange
-            IGarage<Vehicle> garage = new Garage<Vehicle>(5);
+            var garage = new Garage<Vehicle>(5);
 
             // Act
             garage.AddVehicle(_vehicles[0]);
@@ -31,10 +31,22 @@ namespace GarageApp3.Tests
         }
 
         [Fact]
-        public void TestCountVehicleType()
+        public void AddVehicle_IsFull_ThrowsInvalidOperationException()
         {
             // Arrange
-            IGarage<Vehicle> garage = new Garage<Vehicle>(5);
+            var garage = new Garage<Vehicle>(1);
+            garage.AddVehicle(_vehicles[0]);
+
+            // Act and Assert
+            var exception = Assert.Throws<InvalidOperationException>(() => garage.AddVehicle(_vehicles[1]));
+            Assert.Equal("The garage is full.", exception.Message);
+        }
+
+        [Fact]
+        public void CountVehicleType_ReturnsCorrectCount()
+        {
+            // Arrange
+            var garage = new Garage<Vehicle>(5);
             garage.AddVehicle(_vehicles[0]);
             garage.AddVehicle(_vehicles[1]);
             garage.AddVehicle(_vehicles[2]);
@@ -48,10 +60,10 @@ namespace GarageApp3.Tests
         }
 
         [Fact]
-        public void TestFindVehicleByRegistrationNumber()
+        public void FindVehicleByRegistrationNumber_ReturnsCorrectVehicle()
         {
             // Arrange
-            IGarage<Vehicle> garage = new Garage<Vehicle>(5);
+            var garage = new Garage<Vehicle>(5);
             garage.AddVehicle(_vehicles[0]);
             garage.AddVehicle(_vehicles[1]);
             garage.AddVehicle(_vehicles[2]);
@@ -66,10 +78,10 @@ namespace GarageApp3.Tests
         }
 
         [Fact]
-        public void TestFindVehiclesByNumberOfSeats()
+        public void FindVehiclesByNumberOfSeats_ReturnsCorrectVehicle()
         {
             // Arrange
-            IGarage<Vehicle> garage = new Garage<Vehicle>(5);
+            var garage = new Garage<Vehicle>(5);
             garage.AddVehicle(_vehicles[0]);
             garage.AddVehicle(_vehicles[1]);
             garage.AddVehicle(_vehicles[2]);
@@ -85,10 +97,10 @@ namespace GarageApp3.Tests
         }
 
         [Fact]
-        public void TestFindVehiclesByVehicleType()
+        public void FindVehiclesByVehicleType_ReturnsCorrectVehicle()
         {
             // Arrange
-            IGarage<Vehicle> garage = new Garage<Vehicle>(5);
+            var garage = new Garage<Vehicle>(5);
             garage.AddVehicle(_vehicles[0]);
             garage.AddVehicle(_vehicles[1]);
             garage.AddVehicle(_vehicles[2]);
@@ -104,17 +116,17 @@ namespace GarageApp3.Tests
         }
 
         [Fact]
-        public void TestFindVehiclesByVehicleTypeAndFuelType()
+        public void FindVehiclesByVehicleTypeAndFuelType_ReturnsCorrectVehicle()
         {
             // Arrange
-            IGarage<Vehicle> garage = new Garage<Vehicle>(5);
+            var garage = new Garage<Vehicle>(5);
             garage.AddVehicle(_vehicles[0]);
             garage.AddVehicle(_vehicles[1]);
             garage.AddVehicle(_vehicles[2]);
             garage.AddVehicle(_vehicles[3]);
 
             // Act
-            var vehicles = garage.FindVehiclesByVehicleTypeAndFuelType(VehicleType.Truck, FuelType.Gasoline);
+            var vehicles = garage.FindVehiclesByVehicleTypeAndFuelType(VehicleType.Truck, FuelType.Diesel);
 
             // Assert
             Assert.Single(vehicles);
@@ -122,40 +134,11 @@ namespace GarageApp3.Tests
             Assert.Equal("RTH 09T", vehicles[0].RegistrationNumber);
         }
 
-        //[Fact]
-        //public void TestIsEmpty()
-        //{
-        //    // Arrange
-        //    IGarage<Vehicle> garage = new Garage<Vehicle>(5);
-        //    garage.AddVehicle(_vehicles[0]);
-
-        //    // Act
-        //    garage.RemoveVehicleByRegistrationNumber("XYZ 123");
-
-        //    // Assert
-        //    Assert.True(garage.IsEmpty);
-        //}
-
-        //[Fact]
-        //public void TestIsFull()
-        //{
-        //    // Arrange
-        //    IGarage<Vehicle> garage = new Garage<Vehicle>(3);
-
-        //    // Act
-        //    garage.AddVehicle(_vehicles[0]);
-        //    garage.AddVehicle(_vehicles[1]);
-        //    garage.AddVehicle(_vehicles[2]);
-
-        //    // Assert
-        //    Assert.True(garage.IsFull);
-        //}
-
         [Fact]
-        public void TestRemoveAll()
+        public void RemoveAll_ReturnsCorrectVehicles()
         {
             // Arrange
-            IGarage<Vehicle> garage = new Garage<Vehicle>(5);
+            var garage = new Garage<Vehicle>(5);
             garage.AddVehicle(_vehicles[0]);
             garage.AddVehicle(_vehicles[1]);
             garage.AddVehicle(_vehicles[2]);
@@ -170,10 +153,10 @@ namespace GarageApp3.Tests
         }
 
         [Fact]
-        public void TestRemoveVehicleByRegistrationNumber()
+        public void RemoveVehicleByRegistrationNumber_ReturnsCorrectVehicle()
         {
             // Arrange
-            IGarage<Vehicle> garage = new Garage<Vehicle>(5);
+            var garage = new Garage<Vehicle>(5);
             garage.AddVehicle(_vehicles[0]);
             garage.AddVehicle(_vehicles[1]);
             garage.AddVehicle(_vehicles[2]);
@@ -189,10 +172,21 @@ namespace GarageApp3.Tests
         }
 
         [Fact]
-        public void TestVehicleExists()
+        public void RemoveVehicleByRegistrationNumber_IsEmpty_ThrowsInvalidOperationException()
         {
             // Arrange
-            IGarage<Vehicle> garage = new Garage<Vehicle>(5);
+            var garage = new Garage<Vehicle>(5);
+
+            // Act and Assert
+            var exception = Assert.Throws<InvalidOperationException>(() => garage.RemoveVehicleByRegistrationNumber("XYZ 123"));
+            Assert.Equal("The garage is empty.", exception.Message);
+        }
+
+        [Fact]
+        public void VehicleExists_ReturnsCorrectResult()
+        {
+            // Arrange
+            var garage = new Garage<Vehicle>(5);
             garage.AddVehicle(_vehicles[0]);
             garage.AddVehicle(_vehicles[1]);
             garage.AddVehicle(_vehicles[2]);

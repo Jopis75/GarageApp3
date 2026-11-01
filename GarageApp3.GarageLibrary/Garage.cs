@@ -24,7 +24,7 @@ namespace GarageApp3.GarageLibrary
         {
             if (IsFull)
             {
-                throw new IndexOutOfRangeException("The garage is full.");
+                throw new InvalidOperationException("The garage is full.");
             }
 
             _vehicles.Add(vehicle);
@@ -126,7 +126,7 @@ namespace GarageApp3.GarageLibrary
         {
             if (IsEmpty)
             {
-                throw new IndexOutOfRangeException("The garage is empty.");
+                throw new InvalidOperationException("The garage is empty.");
             }
 
             var vehicle = FindVehicleByRegistrationNumber(registrationNumber);
@@ -156,7 +156,7 @@ namespace GarageApp3.GarageLibrary
 
         public void WriteVehicleTypes(TextWriter textWriter)
         {
-            var vehicleTypes = Enum.GetValues(typeof(VehicleType)).Cast<VehicleType>();
+            var vehicleTypes = Enum.GetValues<VehicleType>().Cast<VehicleType>();
 
             foreach (var vehicleType in vehicleTypes)
             {
