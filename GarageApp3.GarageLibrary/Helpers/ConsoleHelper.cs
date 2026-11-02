@@ -1,4 +1,6 @@
-﻿using GarageApp3.GarageLibrary.Validators;
+﻿using GarageApp3.GarageLibrary.Dtos;
+using GarageApp3.GarageLibrary.Interfaces;
+using GarageApp3.GarageLibrary.Validators;
 
 namespace GarageApp3.GarageLibrary.Helpers
 {
@@ -74,7 +76,6 @@ namespace GarageApp3.GarageLibrary.Helpers
                         return null;
                     }
 
-                    //var fileName = Path.GetFileName(path);
                     var directoryName = Path.GetDirectoryName(path);
 
                     if (Directory.Exists(directoryName) == false)

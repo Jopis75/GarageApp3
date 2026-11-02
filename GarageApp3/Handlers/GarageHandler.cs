@@ -1,9 +1,12 @@
 ﻿using GarageApp3.GarageLibrary;
+using GarageApp3.GarageLibrary.Dtos;
 using GarageApp3.GarageLibrary.Enums;
 using GarageApp3.GarageLibrary.Exceptions;
 using GarageApp3.GarageLibrary.Helpers;
+using GarageApp3.GarageLibrary.Interfaces;
 using GarageApp3.GarageLibrary.IO;
 using GarageApp3.Interfaces;
+using System.Diagnostics.Metrics;
 
 namespace GarageApp3.Handlers
 {
@@ -47,25 +50,25 @@ namespace GarageApp3.Handlers
                 switch (selection)
                 {
                     case "1":
-                        //AddVehicle(garage, VehicleType.Bicycle);
+                        AddVehicle(VehicleType.Bicycle);
                         break;
                     case "2":
-                        //AddVehicle(garage, VehicleType.Motorcycle);
+                        AddVehicle(VehicleType.Motorcycle);
                         break;
                     case "3":
-                        //AddVehicle(garage, VehicleType.Car);
+                        AddVehicle(VehicleType.Car);
                         break;
                     case "4":
-                        //AddVehicle(garage, VehicleType.Truck);
+                        AddVehicle(VehicleType.Truck);
                         break;
                     case "5":
-                        //AddVehicle(garage, VehicleType.Bus);
+                        AddVehicle(VehicleType.Bus);
                         break;
                     case "6":
-                        //AddVehicle(garage, VehicleType.Boat);
+                        AddVehicle(VehicleType.Boat);
                         break;
                     case "7":
-                        //AddVehicle(garage, VehicleType.Airplane);
+                        AddVehicle(VehicleType.Airplane);
                         break;
                     case "8":
                         exit = true;
@@ -508,6 +511,60 @@ namespace GarageApp3.Handlers
 
         #region Private helper methods
 
+        private void AddVehicle(VehicleType vehicleType)
+        {
+            var title = $"   Add {vehicleType} vehicle to garage   ";
+            var dashLine = new string('-', title.Length);
+
+            while (true)
+            {
+                if (_garage.IsFull)
+                {
+                    WriteGarageIsFullPage(title);
+                    break;
+                }
+                else
+                {
+                    Console.Clear();
+
+                    WriteGarageAppHeader();
+
+                    Console.WriteLine();
+                    Console.WriteLine(dashLine);
+                    Console.WriteLine(title);
+                    Console.WriteLine(dashLine);
+                    Console.WriteLine();
+
+                    var vehicle = ReadVehicle(vehicleType);
+
+                    try
+                    {
+                        _garage.AddVehicle((TVehicle)vehicle!);
+
+                        Console.WriteLine();
+                        ConsoleHelper.WriteSuccessLine($"The vehicle with registrationnumber '{vehicle.RegistrationNumber}' was added successfully.");
+                        Console.WriteLine();
+                    }
+                    catch (InvalidOperationException ex)
+                    {
+                        Console.WriteLine();
+                        ConsoleHelper.WriteErrorLine($"An error occurred while adding the vehicle: {ex.Message}");
+                        Console.WriteLine();
+                        Console.Write("Press any key to continue...");
+                        Console.ReadKey();
+                        break;
+                    }
+
+                    var addAnother = ConsoleHelper.ReadYesNo("Do you want to add another ('y', 'n')? ");
+
+                    if (addAnother == false)
+                    {
+                        break;
+                    }
+                }
+            }
+        }
+
         private void FindVehiclesByNumberOfSeats()
         {
             if (_garage.IsEmpty)
@@ -715,6 +772,120 @@ namespace GarageApp3.Handlers
             }
         }
 
+        private Airplane ReadAirplaneFields()
+        {
+            var vehicleDto = ReadVehicleFields();
+            var motorVehicleDto = ReadMotorVehicleFields();
+            var maxThrust = ConsoleHelper.ReadFloat("Enter the Max thrust (> 0.0): ", value => !(value > 0.0f) || value > float.MaxValue);
+
+            return new Airplane(vehicleDto.RegistrationNumber, vehicleDto.Length, vehicleDto.NumberOfSeats, motorVehicleDto.NumberOfEngines, motorVehicleDto.CylinderVolume, motorVehicleDto.FuelType, maxThrust);
+        }
+
+        private Bicycle ReadBicycleFields()
+        {
+            var vehicleDto = ReadVehicleFields();
+            var numberOfGears = ConsoleHelper.ReadInt("Enter the number of gears (> 0): ", value => value < 1 || value > int.MaxValue);
+
+            return new Bicycle(vehicleDto.RegistrationNumber, vehicleDto.Length, vehicleDto.NumberOfSeats, numberOfGears);
+        }
+
+        private Boat ReadBoatFields()
+        {
+            var vehicleDto = ReadVehicleFields();
+            var motorVehicleDto = ReadMotorVehicleFields();
+            var draft = ConsoleHelper.ReadFloat("Enter the draft (> 0.0): ", value => !(value > 0.0f) || value > float.MaxValue);
+
+            return new Boat(vehicleDto.RegistrationNumber, vehicleDto.Length, vehicleDto.NumberOfSeats, motorVehicleDto.NumberOfEngines, motorVehicleDto.CylinderVolume, motorVehicleDto.FuelType, draft);
+        }
+
+        private Bus ReadBusFields()
+        {
+            var vehicleDto = ReadVehicleFields();
+            var motorVehicleDto = ReadMotorVehicleFields();
+            var numberOfPassengerSeats = ConsoleHelper.ReadInt("Enter the number of passenger seats (> 0): ", value => value < 1 || value > int.MaxValue);
+
+            return new Bus(vehicleDto.RegistrationNumber, vehicleDto.Length, vehicleDto.NumberOfSeats, motorVehicleDto.NumberOfEngines, motorVehicleDto.CylinderVolume, motorVehicleDto.FuelType, numberOfPassengerSeats);
+        }
+
+        private Car ReadCarFields()
+        {
+            var vehicleDto = ReadVehicleFields();
+            var motorVehicleDto = ReadMotorVehicleFields();
+            var maxTrailerWeight = ConsoleHelper.ReadFloat("Enter the maximum trailer weight (> 0.0): ", value => !(value > 0.0f) || value > float.MaxValue);
+
+            return new Car(vehicleDto.RegistrationNumber, vehicleDto.Length, vehicleDto.NumberOfSeats, motorVehicleDto.NumberOfEngines, motorVehicleDto.CylinderVolume, motorVehicleDto.FuelType, maxTrailerWeight);
+        }
+
+        private Motorcycle ReadMotorcycleFields()
+        {
+            var vehicleDto = ReadVehicleFields();
+            var motorVehicleDto = ReadMotorVehicleFields();
+            var seatHeight = ConsoleHelper.ReadFloat("Enter the seat height (> 0.0): ", value => !(value > 0.0f) || value > float.MaxValue);
+
+            return new Motorcycle(vehicleDto.RegistrationNumber, vehicleDto.Length, vehicleDto.NumberOfSeats, motorVehicleDto.NumberOfEngines, motorVehicleDto.CylinderVolume, motorVehicleDto.FuelType, seatHeight);
+        }
+
+        private MotorVehicleDto ReadMotorVehicleFields()
+        {
+            var numberOfEngines = ConsoleHelper.ReadInt("Enter the number of engines (> 0): ", value => value < 1 || value > int.MaxValue);
+            var cylinderVolume = ConsoleHelper.ReadFloat("Enter the cylinder volume (> 0.0): ", value => !(value > 0.0f) || value > float.MaxValue);
+            var fuelType = ConsoleHelper.ReadEnum<FuelType>("Enter the fuel type ('Gasoline', 'Diesel'): ");
+
+            return new MotorVehicleDto(numberOfEngines, cylinderVolume, fuelType);
+        }
+
+        private Truck ReadTruckFields()
+        {
+            var vehicleDto = ReadVehicleFields();
+            var motorVehicleDto = ReadMotorVehicleFields();
+            var maximumLoad = ConsoleHelper.ReadFloat("Enter the maximum load (> 0.0): ", value => !(value > 0.0f) || value > float.MaxValue);
+
+            return new Truck(vehicleDto.RegistrationNumber, vehicleDto.Length, vehicleDto.NumberOfSeats, motorVehicleDto.NumberOfEngines, motorVehicleDto.CylinderVolume, motorVehicleDto.FuelType, maximumLoad);
+        }
+
+        private Vehicle ReadVehicle(VehicleType vehicleType)
+        {
+            return vehicleType switch
+            {
+                VehicleType.Bicycle => ReadBicycleFields(),
+                VehicleType.Motorcycle => ReadMotorcycleFields(),
+                VehicleType.Car => ReadCarFields(),
+                VehicleType.Truck => ReadTruckFields(),
+                VehicleType.Bus => ReadBusFields(),
+                VehicleType.Boat => ReadBoatFields(),
+                VehicleType.Airplane => ReadAirplaneFields(),
+                _ => throw new ArgumentException($"Invalid vehicle type: {vehicleType}.")
+            };
+        }
+
+        private VehicleDto ReadVehicleFields()
+        {
+            var registrationNumber = string.Empty;
+
+            var registrationNumberExists = true;
+
+            while (registrationNumberExists)
+            {
+                registrationNumber = ConsoleHelper.ReadRegistrationNumber("Enter the registration number: ");
+
+                if (_garage.VehicleExists(registrationNumber))
+                {
+                    Console.WriteLine();
+                    ConsoleHelper.WriteErrorLine($"The registration number '{registrationNumber}' already exists.");
+                    Console.WriteLine();
+                }
+                else
+                {
+                    registrationNumberExists = false;
+                }
+            }
+
+            var length = ConsoleHelper.ReadFloat("Enter the length (> 0.0): ", value => !(value > 0.0f) || value > float.MaxValue);
+            var numberOfSeats = ConsoleHelper.ReadInt("Enter the number of seats (> 0): ", value => value < 1 || value > int.MaxValue);
+
+            return new VehicleDto(registrationNumber, length, numberOfSeats);
+        }
+
         private void WriteGarageAppHeader()
         {
             Console.WriteLine(" ▄██████ ██████▄  ██████▄  ██████▄   ▄██████  ▄██████      ██████▄  ██████▄  ██████▄       ██████▄ \r\n▒▒▒  ▀▀▀ ▄▄▄  ▒▒▒ ▄▄▄  ▒▒▀ ▄▄▄  ▒▒▒ ▒▒▒  ▀▀▀ ▒▒▒  ▀▀▀      ▄▄▄  ▒▒▒ ▄▄▄  ▒▒▒ ▄▄▄  ▒▒▒      ▀▀▀  ▒▒▒\r\n███ ████ ████████ ██████▄  ████████ ███ ████ █████▀        ████████ ██████▀  ██████▀         ▀█████\r\n▒▒▒  ▒▒▒ ▒▒▒  ▒▒▒ ▒▒▒  ▒▒▒ ▒▒▒  ▒▒▒ ▒▒▒  ▒▒▒ ▒▒▒  ▄▄▄      ▒▒▒  ▒▒▒ ▒▒▒      ▒▒▒           ▄▄▄  ▒▒▒\r\n ▀██████ ███  ███ ███  ███ ███  ███  ▀██████  ▀██████      ███  ███ ███      ███           ██████▀ ");
@@ -729,19 +900,39 @@ namespace GarageApp3.Handlers
 
         private void WriteGarageIsEmptyPage(string title)
         {
-            var titleUnderline = new string('-', title.Length);
+            var dashLine = new string('-', title.Length);
 
             Console.Clear();
 
             WriteGarageAppHeader();
 
             Console.WriteLine();
-            Console.WriteLine(titleUnderline);
+            Console.WriteLine(dashLine);
             Console.WriteLine(title);
-            Console.WriteLine(titleUnderline);
+            Console.WriteLine(dashLine);
             Console.WriteLine();
 
             ConsoleHelper.WriteInfoLine("The garage is empty.");
+            Console.WriteLine();
+
+            WritePressAnyKeyToContinue();
+        }
+
+        private void WriteGarageIsFullPage(string title)
+        {
+            var dashLine = new string('-', title.Length);
+
+            Console.Clear();
+            
+            WriteGarageAppHeader();
+            
+            Console.WriteLine();
+            Console.WriteLine(dashLine);
+            Console.WriteLine(title);
+            Console.WriteLine(dashLine);
+            Console.WriteLine();
+
+            ConsoleHelper.WriteInfoLine("The garage is full.");
             Console.WriteLine();
 
             WritePressAnyKeyToContinue();
@@ -755,162 +946,5 @@ namespace GarageApp3.Handlers
         }
 
         #endregion
-
-        //static void AddVehicle<TVehicle>(IGarage<TVehicle> garage, VehicleType vehicleType)
-        //    where TVehicle : Vehicle
-        //{
-        //    try
-        //    {
-        //        while (true)
-        //        {
-        //            var infoString = $"   Add {vehicleType} vehicle to garage   ";
-        //            var infoStringUnderline = new string('-', infoString.Length);
-
-        //            if (garage.IsFull)
-        //            {
-        //                Console.Clear();
-
-        //                WriteGarageAppWelcomeInfo();
-        //                ConsoleHelper.WriteInfoLine(garage.StatusString());
-
-        //                Console.WriteLine();
-
-        //                Console.WriteLine(infoStringUnderline);
-        //                Console.WriteLine(infoString);
-        //                Console.WriteLine(infoStringUnderline);
-        //                Console.WriteLine();
-
-        //                ConsoleHelper.WriteInfoLine("The garage is full.");
-        //                Console.WriteLine();
-        //                Console.WriteLine();
-        //                Console.Write("Press any key to continue...");
-        //                Console.ReadKey();
-        //                break;
-        //            }
-        //            else
-        //            {
-        //                Console.Clear();
-
-        //                WriteGarageAppWelcomeInfo();
-        //                ConsoleHelper.WriteInfoLine(garage.StatusString());
-
-        //                Console.WriteLine();
-
-        //                Console.WriteLine(infoStringUnderline);
-        //                Console.WriteLine(infoString);
-        //                Console.WriteLine(infoStringUnderline);
-        //                Console.WriteLine();
-
-        //                var registrationNumber = string.Empty;
-
-        //                while (true)
-        //                {
-        //                    registrationNumber = ConsoleHelper.ReadRegistrationNumber("Enter the registration number: ");
-
-        //                    if (garage.VehicleExists(registrationNumber))
-        //                    {
-        //                        Console.WriteLine();
-        //                        ConsoleHelper.WriteErrorLine($"The registration number '{registrationNumber}' already exists.");
-        //                        Console.WriteLine();
-        //                    }
-        //                    else
-        //                    {
-        //                        break;
-        //                    }
-        //                }
-
-        //                Vehicle? vehicle = null;
-
-        //                var length = ConsoleHelper.ReadFloat("Enter the length (> 0.0): ", value => !(value > 0.0f) || value > float.MaxValue);
-        //                var numberOfSeats = ConsoleHelper.ReadInt("Enter the number of seats (> 0): ", value => value < 1 || value > int.MaxValue);
-
-        //                if (vehicleType == VehicleType.Bicycle)
-        //                {
-        //                    var numberOfGears = ConsoleHelper.ReadInt("Enter the number of gears (> 0): ", value => value < 1 || value > int.MaxValue);
-
-        //                    vehicle = new Bicycle(registrationNumber, length, numberOfSeats, numberOfGears);
-        //                }
-        //                else
-        //                {
-        //                    var numberOfEngines = ConsoleHelper.ReadInt("Enter the number of engines (> 0): ", value => value < 1 || value > int.MaxValue);
-        //                    var cylinderVolume = ConsoleHelper.ReadFloat("Enter the cylinder volume (> 0.0): ", value => !(value > 0.0f) || value > float.MaxValue);
-        //                    var fuelType = ConsoleHelper.ReadEnum<FuelType>("Enter the fuel type ('Gasoline', 'Diesel'): ");
-
-        //                    if (vehicleType == VehicleType.Motorcycle)
-        //                    {
-        //                        var seatHeight = ConsoleHelper.ReadFloat("Enter the seat height (> 0.0): ", value => !(value > 0.0f) || value > float.MaxValue);
-
-        //                        vehicle = new Motorcycle(registrationNumber, length, numberOfSeats, numberOfEngines, cylinderVolume, fuelType, seatHeight);
-        //                    }
-        //                    else if (vehicleType == VehicleType.Car)
-        //                    {
-        //                        var maxTrailerWeight = ConsoleHelper.ReadFloat("Enter the maximum trailer weight (> 0.0): ", value => !(value > 0.0f) || value > float.MaxValue);
-
-        //                        vehicle = new Car(registrationNumber, length, numberOfSeats, numberOfEngines, cylinderVolume, fuelType, maxTrailerWeight);
-        //                    }
-        //                    else if (vehicleType == VehicleType.Truck)
-        //                    {
-        //                        var maximumLoad = ConsoleHelper.ReadFloat("Enter the maximum load (> 0.0): ", value => !(value > 0.0f) || value > float.MaxValue);
-
-        //                        vehicle = new Truck(registrationNumber, length, numberOfSeats, numberOfEngines, cylinderVolume, fuelType, maximumLoad);
-        //                    }
-        //                    else if (vehicleType == VehicleType.Bus)
-        //                    {
-        //                        var numberOfPassengerSeats = ConsoleHelper.ReadInt("Enter the number of passenger seats (> 0): ", value => value < 1 || value > int.MaxValue);
-
-        //                        vehicle = new Bus(registrationNumber, length, numberOfSeats, numberOfEngines, cylinderVolume, fuelType, numberOfPassengerSeats);
-        //                    }
-        //                    else if (vehicleType == VehicleType.Boat)
-        //                    {
-        //                        var draft = ConsoleHelper.ReadFloat("Enter the draft (> 0.0): ", value => !(value > 0.0f) || value > float.MaxValue);
-
-        //                        vehicle = new Boat(registrationNumber, length, numberOfSeats, numberOfEngines, cylinderVolume, fuelType, draft);
-        //                    }
-        //                    else if (vehicleType == VehicleType.Airplane)
-        //                    {
-        //                        var maxThrust = ConsoleHelper.ReadFloat("Enter the Max thrust (> 0.0): ", value => !(value > 0.0f) || value > float.MaxValue);
-
-        //                        vehicle = new Airplane(registrationNumber, length, numberOfSeats, numberOfEngines, cylinderVolume, fuelType, maxThrust);
-        //                    }
-        //                }
-
-        //                try
-        //                {
-        //                    garage.AddVehicle((TVehicle)vehicle!);
-
-        //                    Console.WriteLine();
-        //                    ConsoleHelper.WriteSuccessLine($"The vehicle with registrationnumber {registrationNumber} was added successfully.");
-        //                    Console.WriteLine();
-        //                }
-        //                catch (IndexOutOfRangeException ex)
-        //                {
-        //                    Console.WriteLine();
-        //                    ConsoleHelper.WriteErrorLine($"An error occurred while adding the vehicle: {ex.Message}");
-        //                    Console.WriteLine();
-        //                    Console.Write("Press any key to continue...");
-        //                    Console.ReadKey();
-        //                    break;
-        //                }
-
-        //                var addAnother = ConsoleHelper.ReadYesNo("Do you want to add another ('y', 'n')? ");
-
-        //                if (addAnother == false)
-        //                {
-        //                    break;
-        //                }
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine();
-        //        ConsoleHelper.WriteErrorLine($"An unexpected error has occurred: {ex.Message}");
-        //        Console.WriteLine();
-        //        Console.Write("Press any key to continue...");
-        //        Console.ReadKey();
-        //        throw;
-        //    }
-        //}
-
     }
 }

@@ -1,4 +1,5 @@
-﻿using GarageApp3.GarageLibrary.Enums;
+﻿using GarageApp3.GarageLibrary.Dtos;
+using GarageApp3.GarageLibrary.Enums;
 using GarageApp3.GarageLibrary.Extensions;
 using GarageApp3.GarageLibrary.Validators;
 
@@ -6,10 +7,6 @@ namespace GarageApp3.GarageLibrary.IO
 {
     public static class VehicleCsvLineParser
     {
-        private record VehicleData(string RegistrationNumber, float Length, int NumberOfSeats);
-
-        private record MotorVehicleData(int NumberOfEngines, float CylinderVolume, FuelType FuelType);
-
         public static IList<Vehicle> Parse(string[] lines)
         {
             List<Vehicle> vehicles = [];
@@ -200,7 +197,7 @@ namespace GarageApp3.GarageLibrary.IO
             return new Motorcycle(vehicleData.RegistrationNumber, vehicleData.Length, vehicleData.NumberOfSeats, motorVehicleData.NumberOfEngines, motorVehicleData.CylinderVolume, motorVehicleData.FuelType, seatHeight);
         }
 
-        private static MotorVehicleData ParseMotorVehicleData(string[] fields, VehicleType vehicleType)
+        private static MotorVehicleDto ParseMotorVehicleData(string[] fields, VehicleType vehicleType)
         {
             if (int.TryParse(fields[4], out var numberOfEngines) == false)
             {
@@ -217,7 +214,7 @@ namespace GarageApp3.GarageLibrary.IO
                 throw new ArgumentException($"Invalid fuel type value in CSV line when parsing {vehicleType}.");
             }
 
-            return new MotorVehicleData(numberOfEngines, cylinderVolume, fuelType);
+            return new MotorVehicleDto(numberOfEngines, cylinderVolume, fuelType);
         }
 
         private static Truck ParseTruck(string line)
@@ -246,7 +243,7 @@ namespace GarageApp3.GarageLibrary.IO
             return new Truck(vehicleData.RegistrationNumber, vehicleData.Length, vehicleData.NumberOfSeats, motorVehicleData.NumberOfEngines, motorVehicleData.CylinderVolume, motorVehicleData.FuelType, maxLoad);
         }
 
-        private static VehicleData ParseVehicleData(string[] fields, VehicleType vehicleType)
+        private static VehicleDto ParseVehicleData(string[] fields, VehicleType vehicleType)
         {
             if (RegistrationNumberValidator.Validate(fields[1]) == false)
             {
@@ -265,7 +262,7 @@ namespace GarageApp3.GarageLibrary.IO
                 throw new ArgumentException($"Invalid number of seats value in CSV line when parsing {vehicleType}.");
             }
 
-            return new VehicleData(registrationNumber, length, numberOfSeats);
+            return new VehicleDto(registrationNumber, length, numberOfSeats);
         }
     }
 }
