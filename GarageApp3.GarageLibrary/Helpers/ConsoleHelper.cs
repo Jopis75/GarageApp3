@@ -1,10 +1,11 @@
-﻿using GarageApp3.GarageLibrary.Validators;
+﻿using GarageApp3.GarageLibrary.Dtos;
+using GarageApp3.GarageLibrary.Validators;
 
 namespace GarageApp3.GarageLibrary.Helpers
 {
     public static class ConsoleHelper
     {
-        public static (string?, StreamWriter?) ReadCreateTextFile(string prompt)
+        public static CreateTextFileDto ReadCreateTextFile(string prompt)
         {
             StreamWriter? streamWriter = null;
 
@@ -17,7 +18,7 @@ namespace GarageApp3.GarageLibrary.Helpers
 
                     if (string.IsNullOrEmpty(path))
                     {
-                        return (null, null);
+                        return new CreateTextFileDto(null, null);
                     }
 
                     if (Path.Exists(path))
@@ -37,10 +38,11 @@ namespace GarageApp3.GarageLibrary.Helpers
                         streamWriter = File.CreateText(path);
                     }
 
-                    return (path, streamWriter);
+                    return new CreateTextFileDto(path, streamWriter);
                 }
                 catch (IOException ex)
                 {
+                    Console.WriteLine();
                     WriteErrorLine(ex.Message);
                 }
             }

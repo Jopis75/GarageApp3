@@ -1,5 +1,5 @@
-﻿using GarageApp3.GarageLibrary;
-using GarageApp3.GarageLibrary.Enums;
+﻿using GarageApp3.GarageLibrary.Enums;
+using GarageApp3.GarageLibrary.Garages;
 using GarageApp3.GarageLibrary.Vehicles;
 
 namespace GarageApp3.Tests

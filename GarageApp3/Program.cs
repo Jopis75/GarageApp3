@@ -6,10 +6,10 @@ using System.Configuration;
 
 try
 {
-    var filePath = GetSampleVehiclesCsvFilePath();
+    var csvFilePath = GetSampleVehiclesCsvFilePath();
     var numberOfParkingSpaces = GetNumberOfParkingSpaces();
 
-    var sampleVehicles = GarageCsvStreamReader.Read(filePath!);
+    var sampleVehicles = GarageCsvStreamReader.Read(csvFilePath!);
 
     var garageHandler = new GarageHandler<Vehicle>(numberOfParkingSpaces);
 

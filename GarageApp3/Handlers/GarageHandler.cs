@@ -433,26 +433,26 @@ namespace GarageApp3.Handlers
             Console.WriteLine("----------------------------");
             Console.WriteLine();
 
-            var (path, streamWriter) = ConsoleHelper.ReadCreateTextFile("Enter the file path (blank to exit): ");
+            var createTextFileDto = ConsoleHelper.ReadCreateTextFile("Enter the file path (blank to exit): ");
 
-            if (!string.IsNullOrEmpty(path))
+            if (!string.IsNullOrEmpty(createTextFileDto.FilePath))
             {
-                if (streamWriter != null)
+                if (createTextFileDto.StreamWriter != null)
                 {
                     Console.WriteLine();
 
-                    var vehiclesCount = GarageCsvStreamWriter<TVehicle>.Write(streamWriter, _garage);
+                    var vehiclesCount = GarageCsvStreamWriter<TVehicle>.Write(createTextFileDto.StreamWriter, _garage);
 
                     if (vehiclesCount > 0)
                     {
-                        ConsoleHelper.WriteInfoLine($"{vehiclesCount}" + (vehiclesCount > 1 ? " vehicles" : " vehicle") + $" was written to the file {path}.");
+                        ConsoleHelper.WriteInfoLine($"{vehiclesCount}" + (vehiclesCount > 1 ? " vehicles" : " vehicle") + $" was written to the file {createTextFileDto.FilePath}.");
                     }
                     else
                     {
-                        ConsoleHelper.WriteInfoLine($"No vehicles was written to the file {path}.");
+                        ConsoleHelper.WriteInfoLine($"No vehicles was written to the file {createTextFileDto.FilePath}.");
                     }
 
-                    streamWriter.Dispose();
+                    createTextFileDto.StreamWriter.Dispose();
                 }
 
                 WritePressAnyKeyToContinue();
