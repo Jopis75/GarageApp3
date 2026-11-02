@@ -6,13 +6,20 @@ using System.Configuration;
 
 try
 {
-    if (int.TryParse(ConfigurationManager.AppSettings.Get("NumberOfParkingSpaces"), out int numberOfParkingSpaces) == false
+    var numberOfParkingSpacesString = ConfigurationManager.AppSettings.Get("NumberOfParkingSpaces");
+
+    if (int.TryParse(numberOfParkingSpacesString, out int numberOfParkingSpaces) == false
         || numberOfParkingSpaces <= 0 || numberOfParkingSpaces > int.MaxValue)
     {
         throw new ArgumentOutOfRangeException(nameof(numberOfParkingSpaces), $"Invalid number of parking spaces value. Must be greater than 0 and less than or equal to {int.MaxValue}.");
     }
 
     var filePath = ConfigurationManager.AppSettings.Get("SampleVehiclesCsvFilePath");
+
+    if (string.IsNullOrWhiteSpace(filePath))
+    {
+        throw new ArgumentException("Invalid file path value. File path cannot be null or whitespace.", nameof(filePath));
+    }
 
     var sampleVehicles = GarageCsvStreamReader.Read(filePath!);
 
