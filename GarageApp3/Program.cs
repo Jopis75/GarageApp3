@@ -6,13 +6,16 @@ using System.Configuration;
 
 try
 {
+    // Get the sample vehicles CSV file path and number of parking spaces from the app.config file.
     var csvFilePath = GetSampleVehiclesCsvFilePath();
     var numberOfParkingSpaces = GetNumberOfParkingSpaces();
 
+    // Read the sample vehicles from the CSV file and initialize the garage handler with the specified number of parking spaces.
     var sampleVehicles = GarageCsvStreamReader.Read(csvFilePath!);
 
     var garageHandler = new GarageHandler<Vehicle>(numberOfParkingSpaces);
 
+    // Initialize the garage handler with the sample vehicles and enter the garage.
     garageHandler.InitGarage(sampleVehicles);
     garageHandler.EnterGarage();
 }

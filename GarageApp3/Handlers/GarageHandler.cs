@@ -194,12 +194,14 @@ namespace GarageApp3.Handlers
 
             Console.WriteLine();
 
+            // Ask the user if they want to add sample vehicles to the garage and add them if they choose to do so.
             var addVehicles = ConsoleHelper.ReadYesNo("Do you want to add sample vehicles to the garage ('y', 'n')? ");
 
             if (addVehicles)
             {
                 var vehiclesCount = 0;
 
+                // Limit the number of vehicles to add to the garage based on the number of parking spaces available and the number of vehicles in the list.
                 var count = Math.Min(_garage.NumberOfParkingSpaces, vehicles.Count);
 
                 foreach (var vehicle in vehicles.Take(count))
@@ -297,10 +299,12 @@ namespace GarageApp3.Handlers
             Console.WriteLine("-----------------------------");
             Console.WriteLine();
 
+            // Read the file path from the console.
             var path = ConsoleHelper.ReadFilePath("Enter the file path (blank to exit): ");
 
             if (!string.IsNullOrEmpty(path))
             {
+                // Read the vehicles from the specified CSV file and display the results.
                 var vehicles = GarageCsvStreamReader.Read(path!);
 
                 if (vehicles.Count == 0)
@@ -323,6 +327,7 @@ namespace GarageApp3.Handlers
 
                     Console.WriteLine();
 
+                    // Ask the user if they want to add the vehicles to the garage and add them if they choose to do so.
                     var addToGarage = ConsoleHelper.ReadYesNo("Do you want to add the vehicles to the garage ('y', 'n')? ");
 
                     if (addToGarage)
@@ -392,12 +397,14 @@ namespace GarageApp3.Handlers
                     Console.WriteLine("--------------------------------");
                     Console.WriteLine();
 
+                    // Read the registration number from the console and attempt to remove the vehicle from the garage.
                     var registrationNumber = ConsoleHelper.ReadRegistrationNumber("Enter the registration number: ");
 
                     Vehicle? vehicle;
 
                     try
                     {
+                        // Remove the vehicle from the garage by the specified registration number and display a success message.
                         vehicle = _garage.RemoveVehicleByRegistrationNumber(registrationNumber);
 
                         Console.WriteLine();
@@ -433,6 +440,7 @@ namespace GarageApp3.Handlers
             Console.WriteLine("----------------------------");
             Console.WriteLine();
 
+            // Read the file path from the console.
             var createTextFileDto = ConsoleHelper.ReadCreateTextFile("Enter the file path (blank to exit): ");
 
             if (!string.IsNullOrEmpty(createTextFileDto.FilePath))
@@ -441,6 +449,7 @@ namespace GarageApp3.Handlers
                 {
                     Console.WriteLine();
 
+                    // Write the vehicles in the garage to the specified CSV file.
                     var vehiclesCount = GarageCsvStreamWriter<TVehicle>.Write(createTextFileDto.StreamWriter, _garage);
 
                     if (vehiclesCount > 0)
@@ -485,10 +494,12 @@ namespace GarageApp3.Handlers
                     Console.WriteLine(dashLine);
                     Console.WriteLine();
 
+                    // Read the vehicle fields from the console based on the vehicle type and create a new vehicle instance.
                     var vehicle = ReadVehicle(vehicleType);
 
                     try
                     {
+                        // Add the vehicle to the garage and display a success message.
                         _garage.AddVehicle((TVehicle)vehicle!);
 
                         Console.WriteLine();
@@ -535,8 +546,10 @@ namespace GarageApp3.Handlers
                     Console.WriteLine("----------------------------------------");
                     Console.WriteLine();
 
+                    // Read the number of seats from the console.
                     var numberOfSeats = ConsoleHelper.ReadInt("Enter the number of seats (> 0): ", value => value < 1 || value > int.MaxValue);
 
+                    // Find vehicles in the garage by the specified number of seats and display the results.
                     var vehicles = _garage.FindVehiclesByNumberOfSeats(numberOfSeats);
 
                     Console.WriteLine();
@@ -588,10 +601,12 @@ namespace GarageApp3.Handlers
                     Console.WriteLine("-----------------------------------------");
                     Console.WriteLine();
 
+                    // Read the registration number from the console.
                     var registrationNumber = ConsoleHelper.ReadRegistrationNumber("Enter the registration number: ");
 
                     try
                     {
+                        // Find the vehicle in the garage by the specified registration number and display the result.
                         var vehicle = _garage.FindVehicleByRegistrationNumber(registrationNumber);
 
                         Console.WriteLine();
@@ -637,8 +652,10 @@ namespace GarageApp3.Handlers
                     Console.WriteLine("-------------------------------------");
                     Console.WriteLine();
 
+                    // Read the vehicle type from the console.
                     var vehicleType = ConsoleHelper.ReadEnum<VehicleType>("Enter the vehicle type ('Bicycle', 'Motorcycle', 'Car', 'Truck', 'Bus', 'Boat', 'Airplane'): ");
 
+                    // Find vehicles in the garage by the specified vehicle type and display the results.
                     var vehicles = _garage.FindVehiclesByVehicleType(vehicleType);
 
                     Console.WriteLine();
@@ -690,9 +707,11 @@ namespace GarageApp3.Handlers
                     Console.WriteLine("---------------------------------------------------");
                     Console.WriteLine();
 
+                    // Read the vehicle type and fuel type from the console.
                     var vehicleType = ConsoleHelper.ReadEnum<VehicleType>("Enter the vehicle type ('Bicycle', 'Motorcycle', 'Car', 'Truck', 'Bus', 'Boat', 'Airplane'): ");
                     var fuelType = ConsoleHelper.ReadEnum<FuelType>("Enter the fuel type ('Gasoline', 'Diesel'): ");
 
+                    // Find vehicles in the garage by the specified vehicle type and fuel type and display the results.
                     var vehicles = _garage.FindVehiclesByVehicleTypeAndFuelType(vehicleType, fuelType);
 
                     Console.WriteLine();
@@ -806,7 +825,7 @@ namespace GarageApp3.Handlers
                 VehicleType.Bus => ReadBusFields(),
                 VehicleType.Boat => ReadBoatFields(),
                 VehicleType.Airplane => ReadAirplaneFields(),
-                _ => throw new ArgumentException($"Invalid vehicle type: {vehicleType}.")
+                _ => throw new ArgumentException($"Invalid vehicle type value '{vehicleType}'.")
             };
         }
 
@@ -814,9 +833,11 @@ namespace GarageApp3.Handlers
         {
             var registrationNumber = string.Empty;
 
-            var registrationNumberExists = true;
+            // Read the registration number from the console and check if it already exists in the garage.
+            // If it does, prompt the user to enter a different registration number until a unique one is provided.
+            var uniqueRegistrationNumber = false;
 
-            while (registrationNumberExists)
+            while (!uniqueRegistrationNumber)
             {
                 registrationNumber = ConsoleHelper.ReadRegistrationNumber("Enter the registration number: ");
 
@@ -828,7 +849,7 @@ namespace GarageApp3.Handlers
                 }
                 else
                 {
-                    registrationNumberExists = false;
+                    uniqueRegistrationNumber = true;
                 }
             }
 
