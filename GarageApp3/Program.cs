@@ -6,15 +6,12 @@ using System.Configuration;
 
 try
 {
-    Console.WriteLine("Welcome to the Garage App 3!");
-    Console.WriteLine();
+    var numberOfParkingSpaces = int.Parse(ConfigurationManager.AppSettings.Get("NumberOfParkingSpaces")!);
+    var filePath = ConfigurationManager.AppSettings.Get("SampleVehiclesCsvFilePath");
 
-    var numberOfParkingSpaces = ConsoleHelper.ReadInt($"Enter the number of parking spaces (> 0): ", value => value < 1 || value > int.MaxValue);
+    var sampleVehicles = GarageCsvStreamReader.Read(filePath!);
 
     var garageHandler = new GarageHandler<Vehicle>(numberOfParkingSpaces);
-
-    var filePath = ConfigurationManager.AppSettings.Get("SampleVehiclesCsvFilePath");
-    var sampleVehicles = GarageCsvStreamReader.Read(filePath!);
 
     garageHandler.InitGarage(sampleVehicles);
     garageHandler.EnterGarage();
