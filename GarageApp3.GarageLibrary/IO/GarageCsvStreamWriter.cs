@@ -9,7 +9,7 @@ namespace GarageApp3.GarageLibrary.IO
         {
             var count = 0;
 
-            foreach (var vehicle in garage.Vehicles)
+            foreach (var vehicle in garage)
             {
                 var x = vehicle.ToString();
                 streamWriter.WriteLine(vehicle.ToString());

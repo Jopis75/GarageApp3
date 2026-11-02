@@ -18,8 +18,6 @@ namespace GarageApp3.GarageLibrary
 
         public int NumberOfVehicles => _vehicles.Count;
 
-        public IReadOnlyList<TVehicle> Vehicles => _vehicles;
-
         public void AddVehicle(TVehicle vehicle)
         {
             if (IsFull)

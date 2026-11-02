@@ -2,7 +2,8 @@
 
 namespace GarageApp3.GarageLibrary.Interfaces
 {
-    public interface IGarage<TVehicle>
+    public interface IGarage<TVehicle> : IEnumerable<TVehicle>
+        where TVehicle : Vehicle
     {
         bool IsEmpty { get; }
 
@@ -11,8 +12,6 @@ namespace GarageApp3.GarageLibrary.Interfaces
         int NumberOfParkingSpaces { get; }
 
         int NumberOfVehicles { get; }
-
-        IReadOnlyList<TVehicle> Vehicles { get; }
 
         void AddVehicle(TVehicle vehicle);
 

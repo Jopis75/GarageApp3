@@ -47,11 +47,6 @@ namespace GarageApp3.GarageLibrary
             }
         }
 
-        public virtual void Read(TextReader textReader)
-        {
-            
-        }
-
         public override string ToString()
         {
             return new StringBuilder().Append(registrationNumber).Append($";{length}").Append($";{numberOfSeats}").ToString();

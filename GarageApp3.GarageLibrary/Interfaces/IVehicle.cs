@@ -8,8 +8,6 @@
 
         string RegistrationNumber { get; }
 
-        void Read(TextReader textReader);
-
         void Write(TextWriter textWriter);
     }
 }

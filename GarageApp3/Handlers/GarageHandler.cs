@@ -6,22 +6,17 @@ using GarageApp3.GarageLibrary.Helpers;
 using GarageApp3.GarageLibrary.Interfaces;
 using GarageApp3.GarageLibrary.IO;
 using GarageApp3.Interfaces;
-using System.Diagnostics.Metrics;
+using Microsoft.VisualBasic.FileIO;
 
 namespace GarageApp3.Handlers
 {
-    public class GarageHandler<TVehicle> : IGarageHandler<TVehicle>
+    public class GarageHandler<TVehicle>(int numberOfParkingSpaces) : IGarageHandler<TVehicle>
         where TVehicle : Vehicle
     {
-        private Garage<TVehicle>? _garage = null;
+        private Garage<TVehicle> _garage = new(numberOfParkingSpaces);
 
         public void HandleAddVehicle()
         {
-            if (_garage == null)
-            {
-                throw new InvalidOperationException("The garage has not been created.");
-            }
-
             var exit = false;
 
             while (exit == false)
@@ -83,10 +78,6 @@ namespace GarageApp3.Handlers
 
             WriteGarageAppHeader();
 
-            var numberOfParkingSpaces = ConsoleHelper.ReadInt($"Enter the number of parking spaces (> 0): ", value => value < 1 || value > int.MaxValue);
-
-            _garage = new Garage<TVehicle>(numberOfParkingSpaces);
-
             Console.WriteLine();
 
             var addVehicles = ConsoleHelper.ReadYesNo("Do you want to add sample vehicles to the garage ('y', 'n')? ");
@@ -132,11 +123,6 @@ namespace GarageApp3.Handlers
 
         public void HandleFindVehicles()
         {
-            if (_garage == null)
-            {
-                throw new InvalidOperationException("The garage has not been created.");
-            }
-
             var exit = false;
 
             while (exit == false)
@@ -182,11 +168,6 @@ namespace GarageApp3.Handlers
 
         public void HandleEnterGarage()
         {
-            if (_garage == null)
-            {
-                throw new InvalidOperationException("The garage has not been created.");
-            }
-
             var quit = false;
 
             while (quit == false)
@@ -245,11 +226,6 @@ namespace GarageApp3.Handlers
 
         public void HandleExitGarage()
         {
-            if (_garage == null)
-            {
-                throw new InvalidOperationException("The garage has not been created.");
-            }
-
             Console.WriteLine();
 
             var saveToFile = ConsoleHelper.ReadYesNo("Do you want to save the garage to a file before quitting ('y', 'n')? ");
@@ -262,11 +238,6 @@ namespace GarageApp3.Handlers
 
         public void HandleListVehicles()
         {
-            if (_garage == null)
-            {
-                throw new InvalidOperationException("The garage has not been created.");
-            }
-
             if (_garage.IsEmpty)
             {
                 WriteGarageIsEmptyPage("   List vehicles in garage   ");
@@ -292,11 +263,6 @@ namespace GarageApp3.Handlers
 
         public void HandleListVehicleTypes()
         {
-            if (_garage == null)
-            {
-                throw new InvalidOperationException("The garage has not been created.");
-            }
-
             if (_garage.IsEmpty)
             {
                 WriteGarageIsEmptyPage("   List vehicle types in garage   ");
@@ -322,11 +288,6 @@ namespace GarageApp3.Handlers
 
         public void HandleReadVehicles()
         {
-            if (_garage == null)
-            {
-                throw new InvalidOperationException("The garage has not been created.");
-            }
-
             Console.Clear();
 
             WriteGarageAppHeader();
@@ -413,11 +374,6 @@ namespace GarageApp3.Handlers
 
         public void HandleRemoveVehicle()
         {
-            if (_garage == null)
-            {
-                throw new InvalidOperationException("The garage has not been created.");
-            }
-
             while (true)
             {
                 if (_garage.IsEmpty)
@@ -468,11 +424,6 @@ namespace GarageApp3.Handlers
 
         public void HandleWriteVehicles()
         {
-            if (_garage == null)
-            {
-                throw new InvalidOperationException("The garage has not been created.");
-            }
-
             Console.Clear();
 
             WriteGarageAppHeader();
@@ -604,7 +555,7 @@ namespace GarageApp3.Handlers
                     }
                     else
                     {
-                        ConsoleHelper.WriteInfoLine($"Could not find any vehicles with number of seats '{numberOfSeats}'.");
+                        ConsoleHelper.WriteErrorLine($"Could not find any vehicles with number of seats '{numberOfSeats}'.");
                         Console.WriteLine();
                     }
 
@@ -644,6 +595,8 @@ namespace GarageApp3.Handlers
                     {
                         var vehicle = _garage.FindVehicleByRegistrationNumber(registrationNumber);
 
+                        Console.WriteLine();
+                        ConsoleHelper.WriteInfoLine($"Found vehicle with registration number '{registrationNumber}'.");
                         Console.WriteLine();
                         vehicle.Write(Console.Out);
                     }
@@ -704,7 +657,7 @@ namespace GarageApp3.Handlers
                     }
                     else
                     {
-                        ConsoleHelper.WriteInfoLine($"Could not find any vehicles with vehicle type '{vehicleType}'.");
+                        ConsoleHelper.WriteErrorLine($"Could not find any vehicles with vehicle type '{vehicleType}'.");
                         Console.WriteLine();
                     }
 
@@ -758,7 +711,7 @@ namespace GarageApp3.Handlers
                     }
                     else
                     {
-                        ConsoleHelper.WriteInfoLine($"Could not find any vehicles with vehicle type '{vehicleType}' and fuel type '{fuelType}'.");
+                        ConsoleHelper.WriteErrorLine($"Could not find any vehicles with vehicle type '{vehicleType}' and fuel type '{fuelType}'.");
                         Console.WriteLine();
                     }
 
@@ -923,9 +876,9 @@ namespace GarageApp3.Handlers
             var dashLine = new string('-', title.Length);
 
             Console.Clear();
-            
+
             WriteGarageAppHeader();
-            
+
             Console.WriteLine();
             Console.WriteLine(dashLine);
             Console.WriteLine(title);
