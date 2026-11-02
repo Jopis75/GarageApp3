@@ -10,7 +10,7 @@ try
     var csvFilePath = GetSampleVehiclesCsvFilePath();
     var numberOfParkingSpaces = GetNumberOfParkingSpaces();
 
-    // Read the sample vehicles from the CSV file and initialize the garage handler with the specified number of parking spaces.
+    // Read the sample vehicles from the CSV file.
     var sampleVehicles = GarageCsvStreamReader.Read(csvFilePath!);
 
     var garageHandler = new GarageHandler<Vehicle>(numberOfParkingSpaces);
