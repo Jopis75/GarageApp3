@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace GarageApp3.GarageLibrary
+namespace GarageApp3.GarageLibrary.Vehicles
 {
     public class Bicycle(string registrationNumber, float length, int numberOfSeats, int numberOfGears) : Vehicle(registrationNumber, length, numberOfSeats)
     {

@@ -1,4 +1,5 @@
 ﻿using GarageApp3.GarageLibrary.Extensions;
+using GarageApp3.GarageLibrary.Vehicles;
 
 namespace GarageApp3.GarageLibrary.IO
 {

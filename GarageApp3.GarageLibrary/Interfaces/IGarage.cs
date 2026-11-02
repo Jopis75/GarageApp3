@@ -1,4 +1,5 @@
 ﻿using GarageApp3.GarageLibrary.Enums;
+using GarageApp3.GarageLibrary.Vehicles;
 
 namespace GarageApp3.GarageLibrary.Interfaces
 {

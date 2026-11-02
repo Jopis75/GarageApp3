@@ -1,7 +1,7 @@
 ﻿using GarageApp3.GarageLibrary.Interfaces;
 using System.Text;
 
-namespace GarageApp3.GarageLibrary
+namespace GarageApp3.GarageLibrary.Vehicles
 {
     public abstract class Vehicle(string registrationNumber, float length, int numberOfSeats) : IVehicle
     {

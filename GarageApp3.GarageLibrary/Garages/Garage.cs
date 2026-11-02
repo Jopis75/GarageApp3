@@ -1,9 +1,10 @@
 ﻿using GarageApp3.GarageLibrary.Enums;
 using GarageApp3.GarageLibrary.Exceptions;
 using GarageApp3.GarageLibrary.Interfaces;
+using GarageApp3.GarageLibrary.Vehicles;
 using System.Collections;
 
-namespace GarageApp3.GarageLibrary
+namespace GarageApp3.GarageLibrary.Garages
 {
     public class Garage<TVehicle>(int numberOfParkingSpaces) : IGarage<TVehicle>, IEnumerable<TVehicle>
         where TVehicle : Vehicle

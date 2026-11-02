@@ -1,7 +1,7 @@
 ﻿using GarageApp3.GarageLibrary.Enums;
 using System.Text;
 
-namespace GarageApp3.GarageLibrary
+namespace GarageApp3.GarageLibrary.Vehicles
 {
     public class Airplane(string registrationNumber, float length, int numberOfSeats, int numberOfEngines, float cylinderVolume, FuelType fuelType, float maxThrust) : MotorVehicle(registrationNumber, length, numberOfSeats, numberOfEngines, cylinderVolume, fuelType)
     {

@@ -1,4 +1,5 @@
 ﻿using GarageApp3.GarageLibrary.Interfaces;
+using GarageApp3.GarageLibrary.Vehicles;
 
 namespace GarageApp3.GarageLibrary.IO
 {
@@ -12,7 +13,6 @@ namespace GarageApp3.GarageLibrary.IO
             foreach (var vehicle in garage)
             {
                 streamWriter.WriteLine(vehicle.ToString());
-
                 count++;
             }
 

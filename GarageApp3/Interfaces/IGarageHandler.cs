@@ -1,4 +1,4 @@
-﻿using GarageApp3.GarageLibrary;
+﻿using GarageApp3.GarageLibrary.Vehicles;
 
 namespace GarageApp3.Interfaces
 {
