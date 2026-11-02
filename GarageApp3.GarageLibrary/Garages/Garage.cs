@@ -137,11 +137,9 @@ namespace GarageApp3.GarageLibrary.Garages
 
         public bool VehicleExists(string registrationNumber)
         {
-            var vehicle = _vehicles
-                .Where(v => v.RegistrationNumber.Equals(registrationNumber, StringComparison.CurrentCultureIgnoreCase))
-                .SingleOrDefault();
+            var exists = _vehicles.Any(v => v.RegistrationNumber.Equals(registrationNumber, StringComparison.CurrentCultureIgnoreCase));
 
-            return vehicle != null;
+            return exists;
         }
 
         public void WriteVehicles(TextWriter textWriter)
