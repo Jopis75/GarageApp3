@@ -16,9 +16,8 @@ try
     var filePath = ConfigurationManager.AppSettings.Get("SampleVehiclesCsvFilePath");
     var sampleVehicles = GarageCsvStreamReader.Read(filePath!);
 
-    garageHandler.HandleCreateGarage(sampleVehicles);
-
-    garageHandler.HandleEnterGarage();
+    garageHandler.InitGarage(sampleVehicles);
+    garageHandler.EnterGarage();
 }
 catch (IOException ex)
 {

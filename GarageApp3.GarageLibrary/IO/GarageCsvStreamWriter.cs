@@ -11,7 +11,6 @@ namespace GarageApp3.GarageLibrary.IO
 
             foreach (var vehicle in garage)
             {
-                var x = vehicle.ToString();
                 streamWriter.WriteLine(vehicle.ToString());
 
                 count++;

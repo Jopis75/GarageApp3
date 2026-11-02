@@ -1,6 +1,4 @@
-﻿using GarageApp3.GarageLibrary.Dtos;
-using GarageApp3.GarageLibrary.Interfaces;
-using GarageApp3.GarageLibrary.Validators;
+﻿using GarageApp3.GarageLibrary.Validators;
 
 namespace GarageApp3.GarageLibrary.Helpers
 {
@@ -24,6 +22,7 @@ namespace GarageApp3.GarageLibrary.Helpers
 
                     if (Path.Exists(path))
                     {
+                        Console.WriteLine();
                         Console.WriteLine($"The file {path} already exists.");
 
                         var replaceContents = ReadYesNo("Do you want to replace its contents ('y', 'n')? ");

@@ -5,24 +5,24 @@ namespace GarageApp3.Interfaces
     public interface IGarageHandler<TVehicle>
         where TVehicle : Vehicle
     {
-        void HandleAddVehicle();
+        void AddVehicle();
 
-        void HandleCreateGarage(IList<TVehicle> vehicles);
+        void EnterGarage();
 
-        void HandleEnterGarage();
+        void ExitGarage();
 
-        void HandleExitGarage();
+        void FindVehicles();
 
-        void HandleFindVehicles();
+        void InitGarage(IList<TVehicle> vehicles);
 
-        void HandleListVehicleTypes();
+        void ListVehicleTypes();
 
-        void HandleListVehicles();
+        void ListVehicles();
 
-        void HandleReadVehicles();
+        void ReadVehicles();
 
-        void HandleRemoveVehicle();
+        void RemoveVehicle();
 
-        void HandleWriteVehicles();
+        void WriteVehicles();
     }
 }

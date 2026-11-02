@@ -3,23 +3,21 @@ using GarageApp3.GarageLibrary.Dtos;
 using GarageApp3.GarageLibrary.Enums;
 using GarageApp3.GarageLibrary.Exceptions;
 using GarageApp3.GarageLibrary.Helpers;
-using GarageApp3.GarageLibrary.Interfaces;
 using GarageApp3.GarageLibrary.IO;
 using GarageApp3.Interfaces;
-using Microsoft.VisualBasic.FileIO;
 
 namespace GarageApp3.Handlers
 {
     public class GarageHandler<TVehicle>(int numberOfParkingSpaces) : IGarageHandler<TVehicle>
         where TVehicle : Vehicle
     {
-        private Garage<TVehicle> _garage = new(numberOfParkingSpaces);
+        private readonly Garage<TVehicle> _garage = new(numberOfParkingSpaces);
 
-        public void HandleAddVehicle()
+        public void AddVehicle()
         {
             var exit = false;
 
-            while (exit == false)
+            while (!exit)
             {
                 Console.Clear();
 
@@ -72,60 +70,11 @@ namespace GarageApp3.Handlers
             }
         }
 
-        public void HandleCreateGarage(IList<TVehicle> vehicles)
-        {
-            Console.Clear();
-
-            WriteGarageAppHeader();
-
-            Console.WriteLine();
-
-            var addVehicles = ConsoleHelper.ReadYesNo("Do you want to add sample vehicles to the garage ('y', 'n')? ");
-
-            if (addVehicles == true)
-            {
-                var vehiclesCount = 0;
-
-                var count = Math.Min(_garage.NumberOfParkingSpaces, vehicles.Count);
-
-                foreach (var vehicle in vehicles.Take(count))
-                {
-                    if (_garage.VehicleExists(vehicle.RegistrationNumber))
-                    {
-                        Console.WriteLine();
-                        ConsoleHelper.WriteErrorLine($"The registration number '{vehicle.RegistrationNumber}' already exists.");
-                    }
-                    else
-                    {
-                        _garage.AddVehicle(vehicle);
-
-                        vehiclesCount++;
-
-                        Console.WriteLine();
-                        ConsoleHelper.WriteSuccessLine($"The vehicle with registrationnumber '{vehicle.RegistrationNumber}' was added successfully.");
-                    }
-                }
-
-                Console.WriteLine();
-
-                if (vehiclesCount > 0)
-                {
-                    ConsoleHelper.WriteInfoLine($"{vehiclesCount}" + (vehiclesCount > 1 ? " vehicles" : " vehicle") + " was added to the garage.");
-                }
-                else
-                {
-                    ConsoleHelper.WriteInfoLine("No vehicles was added to the garage.");
-                }
-
-                WritePressAnyKeyToContinue();
-            }
-        }
-
-        public void HandleFindVehicles()
+        public void FindVehicles()
         {
             var exit = false;
 
-            while (exit == false)
+            while (!exit)
             {
                 Console.Clear();
 
@@ -166,11 +115,11 @@ namespace GarageApp3.Handlers
             }
         }
 
-        public void HandleEnterGarage()
+        public void EnterGarage()
         {
             var quit = false;
 
-            while (quit == false)
+            while (!quit)
             {
                 Console.Clear();
 
@@ -196,35 +145,35 @@ namespace GarageApp3.Handlers
                 switch (selection)
                 {
                     case "1":
-                        HandleAddVehicle();
+                        AddVehicle();
                         break;
                     case "2":
-                        HandleRemoveVehicle();
+                        RemoveVehicle();
                         break;
                     case "3":
-                        HandleFindVehicles();
+                        FindVehicles();
                         break;
                     case "4":
-                        HandleListVehicles();
+                        ListVehicles();
                         break;
                     case "5":
-                        HandleListVehicleTypes();
+                        ListVehicleTypes();
                         break;
                     case "6":
-                        HandleReadVehicles();
+                        ReadVehicles();
                         break;
                     case "7":
-                        HandleWriteVehicles();
+                        WriteVehicles();
                         break;
                     case "8":
-                        HandleExitGarage();
+                        ExitGarage();
                         quit = true;
                         break;
                 }
             }
         }
 
-        public void HandleExitGarage()
+        public void ExitGarage()
         {
             Console.WriteLine();
 
@@ -232,11 +181,60 @@ namespace GarageApp3.Handlers
 
             if (saveToFile)
             {
-                HandleWriteVehicles();
+                WriteVehicles();
             }
         }
 
-        public void HandleListVehicles()
+        public void InitGarage(IList<TVehicle> vehicles)
+        {
+            Console.Clear();
+
+            WriteGarageAppHeader();
+
+            Console.WriteLine();
+
+            var addVehicles = ConsoleHelper.ReadYesNo("Do you want to add sample vehicles to the garage ('y', 'n')? ");
+
+            if (addVehicles)
+            {
+                var vehiclesCount = 0;
+
+                var count = Math.Min(_garage.NumberOfParkingSpaces, vehicles.Count);
+
+                foreach (var vehicle in vehicles.Take(count))
+                {
+                    if (_garage.VehicleExists(vehicle.RegistrationNumber))
+                    {
+                        Console.WriteLine();
+                        ConsoleHelper.WriteErrorLine($"The registration number '{vehicle.RegistrationNumber}' already exists.");
+                    }
+                    else
+                    {
+                        _garage.AddVehicle(vehicle);
+
+                        vehiclesCount++;
+
+                        Console.WriteLine();
+                        ConsoleHelper.WriteSuccessLine($"The vehicle with registrationnumber '{vehicle.RegistrationNumber}' was added successfully.");
+                    }
+                }
+
+                Console.WriteLine();
+
+                if (vehiclesCount > 0)
+                {
+                    ConsoleHelper.WriteInfoLine($"{vehiclesCount}" + (vehiclesCount > 1 ? " vehicles" : " vehicle") + " was added to the garage.");
+                }
+                else
+                {
+                    ConsoleHelper.WriteInfoLine("No vehicles was added to the garage.");
+                }
+
+                WritePressAnyKeyToContinue();
+            }
+        }
+
+        public void ListVehicles()
         {
             if (_garage.IsEmpty)
             {
@@ -261,7 +259,7 @@ namespace GarageApp3.Handlers
             }
         }
 
-        public void HandleListVehicleTypes()
+        public void ListVehicleTypes()
         {
             if (_garage.IsEmpty)
             {
@@ -286,7 +284,7 @@ namespace GarageApp3.Handlers
             }
         }
 
-        public void HandleReadVehicles()
+        public void ReadVehicles()
         {
             Console.Clear();
 
@@ -300,7 +298,7 @@ namespace GarageApp3.Handlers
 
             var path = ConsoleHelper.ReadFilePath("Enter the file path (blank to exit): ");
 
-            if (string.IsNullOrEmpty(path) == false)
+            if (!string.IsNullOrEmpty(path))
             {
                 var vehicles = GarageCsvStreamReader.Read(path!);
 
@@ -372,7 +370,7 @@ namespace GarageApp3.Handlers
             }
         }
 
-        public void HandleRemoveVehicle()
+        public void RemoveVehicle()
         {
             while (true)
             {
@@ -395,11 +393,11 @@ namespace GarageApp3.Handlers
 
                     var registrationNumber = ConsoleHelper.ReadRegistrationNumber("Enter the registration number: ");
 
-                    Vehicle? removedVehicle;
+                    Vehicle? vehicle;
 
                     try
                     {
-                        removedVehicle = _garage.RemoveVehicleByRegistrationNumber(registrationNumber);
+                        vehicle = _garage.RemoveVehicleByRegistrationNumber(registrationNumber);
 
                         Console.WriteLine();
                         ConsoleHelper.WriteSuccessLine($"The vehicle with registration number '{registrationNumber}' was removed successfully.");
@@ -414,7 +412,7 @@ namespace GarageApp3.Handlers
 
                     var removeAnother = ConsoleHelper.ReadYesNo("Do you want to remove another ('y', 'n')? ");
 
-                    if (removeAnother == false)
+                    if (!removeAnother)
                     {
                         break;
                     }
@@ -422,7 +420,7 @@ namespace GarageApp3.Handlers
             }
         }
 
-        public void HandleWriteVehicles()
+        public void WriteVehicles()
         {
             Console.Clear();
 
@@ -436,7 +434,7 @@ namespace GarageApp3.Handlers
 
             var (path, streamWriter) = ConsoleHelper.ReadCreateTextFile("Enter the file path (blank to exit): ");
 
-            if (string.IsNullOrEmpty(path) == false)
+            if (!string.IsNullOrEmpty(path))
             {
                 if (streamWriter != null)
                 {
@@ -508,7 +506,7 @@ namespace GarageApp3.Handlers
 
                     var addAnother = ConsoleHelper.ReadYesNo("Do you want to add another ('y', 'n')? ");
 
-                    if (addAnother == false)
+                    if (!addAnother)
                     {
                         break;
                     }
@@ -561,7 +559,7 @@ namespace GarageApp3.Handlers
 
                     var findAnother = ConsoleHelper.ReadYesNo("Do you want to find another ('y', 'n')? ");
 
-                    if (findAnother == false)
+                    if (!findAnother)
                     {
                         break;
                     }
@@ -610,7 +608,7 @@ namespace GarageApp3.Handlers
 
                     var findAnother = ConsoleHelper.ReadYesNo("Do you want to find another ('y', 'n')? ");
 
-                    if (findAnother == false)
+                    if (!findAnother)
                     {
                         break;
                     }
@@ -663,7 +661,7 @@ namespace GarageApp3.Handlers
 
                     var findAnother = ConsoleHelper.ReadYesNo("Do you want to find another ('y', 'n')? ");
 
-                    if (findAnother == false)
+                    if (!findAnother)
                     {
                         break;
                     }
@@ -717,7 +715,7 @@ namespace GarageApp3.Handlers
 
                     var findAnother = ConsoleHelper.ReadYesNo("Do you want to find another ('y', 'n')? ");
 
-                    if (findAnother == false)
+                    if (!findAnother)
                     {
                         break;
                     }
@@ -845,10 +843,7 @@ namespace GarageApp3.Handlers
             Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine();
-            if (_garage != null)
-            {
-                ConsoleHelper.WriteInfoLine(_garage.StatusString());
-            }
+            ConsoleHelper.WriteInfoLine(_garage.StatusString());
         }
 
         private void WriteGarageIsEmptyPage(string title)
