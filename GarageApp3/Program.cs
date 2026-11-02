@@ -6,7 +6,12 @@ using System.Configuration;
 
 try
 {
-    var numberOfParkingSpaces = int.Parse(ConfigurationManager.AppSettings.Get("NumberOfParkingSpaces")!);
+    if (int.TryParse(ConfigurationManager.AppSettings.Get("NumberOfParkingSpaces"), out int numberOfParkingSpaces) == false
+        || numberOfParkingSpaces <= 0 || numberOfParkingSpaces > int.MaxValue)
+    {
+        throw new ArgumentOutOfRangeException(nameof(numberOfParkingSpaces), $"Invalid number of parking spaces value. Must be greater than 0 and less than or equal to {int.MaxValue}.");
+    }
+
     var filePath = ConfigurationManager.AppSettings.Get("SampleVehiclesCsvFilePath");
 
     var sampleVehicles = GarageCsvStreamReader.Read(filePath!);
