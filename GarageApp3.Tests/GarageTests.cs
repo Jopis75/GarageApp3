@@ -1,12 +1,11 @@
 ﻿using GarageApp3.GarageLibrary;
 using GarageApp3.GarageLibrary.Enums;
-using GarageApp3.GarageLibrary.Interfaces;
 
 namespace GarageApp3.Tests
 {
     public class GarageTests
     {
-        private readonly Vehicle[] _vehicles =  
+        private readonly Vehicle[] _vehicles =
         {
             new Bicycle("XYZ 123", 1.8f, 1, 3),
             new Motorcycle("HAC 26G", 2.1f, 2, 1, 6.0f, FuelType.Gasoline, 60.0f),

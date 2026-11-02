@@ -2,14 +2,17 @@
 using GarageApp3.GarageLibrary.Helpers;
 using GarageApp3.GarageLibrary.IO;
 using GarageApp3.Handlers;
+using System.Configuration;
 
 try
 {
-    var vehicles = GarageCsvStreamReader.Read(@"C:\Users\johan\source\repos\GarageApp3\GarageApp3\SampleVehicles.txt");
+    var filePath = ConfigurationManager.AppSettings.Get("SampleVehiclesCsvFilePath");
+    var sampleVehicles = GarageCsvStreamReader.Read(filePath!);
 
     var garageHandler = new GarageHandler<Vehicle>();
 
-    garageHandler.HandleCreateGarage(vehicles);
+    garageHandler.HandleCreateGarage(sampleVehicles);
+
     garageHandler.HandleEnterGarage();
 }
 catch (Exception ex)

@@ -47,7 +47,7 @@ namespace GarageApp3.GarageLibrary.Helpers
 
         public static TEnum ReadEnum<TEnum>(string prompt) where TEnum : struct
         {
-            var valueInput = string.Empty;
+            string? valueInput;
             TEnum value;
 
             do
@@ -102,8 +102,8 @@ namespace GarageApp3.GarageLibrary.Helpers
 
         public static float ReadFloat(string prompt, Func<float, bool> func)
         {
-            var valueInput = string.Empty;
-            var value = 0.0f;
+            string? valueInput;
+            float value;
 
             do
             {
@@ -117,8 +117,8 @@ namespace GarageApp3.GarageLibrary.Helpers
 
         public static int ReadInt(string prompt, Func<float, bool> func)
         {
-            var valueInput = string.Empty;
-            var value = 0;
+            string? valueInput;
+            int value;
 
             do
             {
@@ -132,7 +132,7 @@ namespace GarageApp3.GarageLibrary.Helpers
 
         public static string ReadRegistrationNumber(string prompt)
         {
-            var registrationNumber = string.Empty;
+            string? registrationNumber;
 
             do
             {
@@ -146,18 +146,22 @@ namespace GarageApp3.GarageLibrary.Helpers
 
         public static bool ReadYesNo(string prompt)
         {
-            var answerInput = string.Empty;
+            string? answerInput;
 
             do
             {
                 Console.Write(prompt);
                 answerInput = Console.ReadLine();
+                answerInput = answerInput?.Trim().ToLower();
             }
             while (answerInput != null
                 && answerInput.Equals("y", StringComparison.CurrentCultureIgnoreCase) == false
-                && answerInput.Equals("n", StringComparison.CurrentCultureIgnoreCase) == false);
+                && answerInput.Equals("yes", StringComparison.CurrentCultureIgnoreCase) == false
+                && answerInput.Equals("n", StringComparison.CurrentCultureIgnoreCase) == false
+                && answerInput.Equals("no", StringComparison.CurrentCultureIgnoreCase) == false);
 
-            return answerInput!.Equals("y", StringComparison.CurrentCultureIgnoreCase);
+            return answerInput!.Equals("y", StringComparison.CurrentCultureIgnoreCase)
+                || answerInput!.Equals("yes", StringComparison.CurrentCultureIgnoreCase);
         }
 
         public static void WriteErrorLine(string message)

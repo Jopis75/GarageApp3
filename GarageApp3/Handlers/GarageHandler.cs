@@ -122,6 +122,8 @@ namespace GarageApp3.Handlers
                 {
                     ConsoleHelper.WriteInfoLine("No vehicles was added to the garage.");
                 }
+
+                WritePressAnyKeyToContinue();
             }
         }
 
@@ -245,13 +247,9 @@ namespace GarageApp3.Handlers
                 throw new InvalidOperationException("The garage has not been created.");
             }
 
-            Console.Clear();
-
-            WriteGarageAppHeader();
-
             Console.WriteLine();
 
-            var saveToFile = ConsoleHelper.ReadYesNo("Do you want to save the garage to a file ('y', 'n')? ");
+            var saveToFile = ConsoleHelper.ReadYesNo("Do you want to save the garage to a file before quitting ('y', 'n')? ");
 
             if (saveToFile)
             {
@@ -445,7 +443,7 @@ namespace GarageApp3.Handlers
                         removedVehicle = _garage.RemoveVehicleByRegistrationNumber(registrationNumber);
 
                         Console.WriteLine();
-                        ConsoleHelper.WriteSuccessLine("The vehicle was removed successfully.");
+                        ConsoleHelper.WriteSuccessLine($"The vehicle with registration number '{registrationNumber}' was removed successfully.");
                     }
                     catch (VehicleNotFoundException ex)
                     {
