@@ -207,7 +207,7 @@ namespace GarageApp3.Handlers
                     if (garage.VehicleExists(vehicle.RegistrationNumber))
                     {
                         Console.WriteLine();
-                        ConsoleHelper.WriteErrorLine($"The registration number '{vehicle.RegistrationNumber}' already exists.");
+                        ConsoleHelper.WriteErrorLine($"A vehicle with registration number '{vehicle.RegistrationNumber}' already exists in the garage.");
                     }
                     else
                     {
@@ -216,7 +216,7 @@ namespace GarageApp3.Handlers
                         vehiclesCount++;
 
                         Console.WriteLine();
-                        ConsoleHelper.WriteSuccessLine($"The vehicle with registrationnumber '{vehicle.RegistrationNumber}' was added successfully.");
+                        ConsoleHelper.WriteSuccessLine($"The vehicle with registrationnumber '{vehicle.RegistrationNumber}' has been added to the garage.");
                     }
                 }
 
@@ -224,11 +224,11 @@ namespace GarageApp3.Handlers
 
                 if (vehiclesCount > 0)
                 {
-                    ConsoleHelper.WriteInfoLine($"{vehiclesCount}" + (vehiclesCount > 1 ? " vehicles" : " vehicle") + " was added to the garage.");
+                    ConsoleHelper.WriteInfoLine($"{vehiclesCount}" + (vehiclesCount > 1 ? " vehicles" : " vehicle") + " has been added to the garage.");
                 }
                 else
                 {
-                    ConsoleHelper.WriteInfoLine("No vehicles was added to the garage.");
+                    ConsoleHelper.WriteInfoLine("No vehicles has been added to the garage.");
                 }
 
                 WritePressAnyKeyToContinue();
@@ -337,7 +337,7 @@ namespace GarageApp3.Handlers
                             if (garage.VehicleExists(vehicle.RegistrationNumber))
                             {
                                 Console.WriteLine();
-                                ConsoleHelper.WriteErrorLine($"The registration number '{vehicle.RegistrationNumber}' already exists.");
+                                ConsoleHelper.WriteErrorLine($"A vehicle with registration number '{vehicle.RegistrationNumber}' already exists in the garage.");
                             }
                             else
                             {
@@ -346,7 +346,7 @@ namespace GarageApp3.Handlers
                                 vehiclesCount++;
 
                                 Console.WriteLine();
-                                ConsoleHelper.WriteSuccessLine($"The vehicle with registrationnumber {vehicle.RegistrationNumber} was added successfully.");
+                                ConsoleHelper.WriteSuccessLine($"The vehicle with registrationnumber {vehicle.RegistrationNumber} has been added to the garage.");
 
                                 if (garage.IsFull)
                                 {
@@ -361,11 +361,11 @@ namespace GarageApp3.Handlers
 
                         if (vehiclesCount > 0)
                         {
-                            ConsoleHelper.WriteInfoLine($"{vehiclesCount}" + (vehiclesCount > 1 ? " vehicles" : " vehicle") + " was added to the garage.");
+                            ConsoleHelper.WriteInfoLine($"{vehiclesCount}" + (vehiclesCount > 1 ? " vehicles" : " vehicle") + " has been added to the garage.");
                         }
                         else
                         {
-                            ConsoleHelper.WriteInfoLine("No vehicles was added to the garage.");
+                            ConsoleHelper.WriteInfoLine("No vehicles has been added to the garage.");
                         }
                     }
                 }
@@ -842,7 +842,7 @@ namespace GarageApp3.Handlers
                 if (garage.VehicleExists(registrationNumber))
                 {
                     Console.WriteLine();
-                    ConsoleHelper.WriteErrorLine($"The registration number '{registrationNumber}' already exists.");
+                    ConsoleHelper.WriteErrorLine($"A vehicle with registration number '{registrationNumber}' already exists in the garage.");
                     Console.WriteLine();
                 }
                 else
