@@ -330,42 +330,50 @@ namespace GarageApp3.Handlers
 
                     if (addToGarage)
                     {
-                        var vehiclesCount = 0;
-
-                        foreach (var vehicle in vehicles)
+                        if (garage.IsFull)
                         {
-                            if (garage.VehicleExists(vehicle.RegistrationNumber))
-                            {
-                                Console.WriteLine();
-                                ConsoleHelper.WriteErrorLine($"A vehicle with registration number '{vehicle.RegistrationNumber}' already exists in the garage.");
-                            }
-                            else
-                            {
-                                garage.AddVehicle((TVehicle)vehicle);
-
-                                vehiclesCount++;
-
-                                Console.WriteLine();
-                                ConsoleHelper.WriteSuccessLine($"The vehicle with registrationnumber {vehicle.RegistrationNumber} has been added to the garage.");
-
-                                if (garage.IsFull)
-                                {
-                                    Console.WriteLine();
-                                    ConsoleHelper.WriteInfoLine("The garage is full.");
-                                    break;
-                                }
-                            }
-                        }
-
-                        Console.WriteLine();
-
-                        if (vehiclesCount > 0)
-                        {
-                            ConsoleHelper.WriteInfoLine($"{vehiclesCount}" + (vehiclesCount > 1 ? " vehicles" : " vehicle") + " has been added to the garage.");
+                            Console.WriteLine();
+                            ConsoleHelper.WriteInfoLine("The garage is full.");
                         }
                         else
                         {
-                            ConsoleHelper.WriteInfoLine("No vehicles has been added to the garage.");
+                            var vehiclesCount = 0;
+
+                            foreach (var vehicle in vehicles)
+                            {
+                                if (garage.VehicleExists(vehicle.RegistrationNumber))
+                                {
+                                    Console.WriteLine();
+                                    ConsoleHelper.WriteErrorLine($"A vehicle with registration number '{vehicle.RegistrationNumber}' already exists in the garage.");
+                                }
+                                else
+                                {
+                                    if (garage.IsFull)
+                                    {
+                                        Console.WriteLine();
+                                        ConsoleHelper.WriteInfoLine("The garage is full.");
+                                        break;
+                                    }
+
+                                    garage.AddVehicle((TVehicle)vehicle);
+
+                                    vehiclesCount++;
+
+                                    Console.WriteLine();
+                                    ConsoleHelper.WriteSuccessLine($"The vehicle with registration number '{vehicle.RegistrationNumber}' has been added to the garage.");
+                                }
+                            }
+
+                            Console.WriteLine();
+
+                            if (vehiclesCount > 0)
+                            {
+                                ConsoleHelper.WriteInfoLine($"{vehiclesCount}" + (vehiclesCount > 1 ? " vehicles" : " vehicle") + " has been added to the garage.");
+                            }
+                            else
+                            {
+                                ConsoleHelper.WriteInfoLine("No vehicles has been added to the garage.");
+                            }
                         }
                     }
                 }

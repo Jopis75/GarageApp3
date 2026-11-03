@@ -140,8 +140,9 @@ namespace GarageApp3.GarageLibrary.Helpers
             {
                 Console.Write(prompt);
                 registrationNumber = Console.ReadLine();
+                registrationNumber = registrationNumber!.ToUpper();
             }
-            while (registrationNumber != null && RegistrationNumberValidator.Validate(registrationNumber.ToUpper()) == false);
+            while (registrationNumber != null && RegistrationNumberValidator.Validate(registrationNumber) == false);
 
             return registrationNumber!;
         }
