@@ -391,10 +391,12 @@ namespace GarageApp3.Handlers
 
                 WritePageTitle("   Remove all vehicles from garage   ");
 
+                // Ask the user if they are sure they want to remove all vehicles from the garage and remove them if they choose to do so.
                 var removeAll = ConsoleHelper.ReadYesNo("Are you sure you want to remove all vehicles from the garage ('y', 'n')? ");
 
                 if (removeAll)
                 {
+                    // Remove all vehicles from the garage and display a success message.
                     garage.RemoveAllVehicles();
 
                     Console.WriteLine();
