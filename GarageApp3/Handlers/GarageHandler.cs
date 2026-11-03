@@ -253,6 +253,9 @@ namespace GarageApp3.Handlers
                 Console.WriteLine("-----------------------------");
                 Console.WriteLine();
 
+                ConsoleHelper.WriteInfoLine($"Found {garage.NumberOfVehicles}" + (garage.NumberOfVehicles > 1 ? " vehicles" : " vehicle") + " in the garage.");
+                Console.WriteLine();
+
                 garage.WriteVehicles(Console.Out);
                 Console.WriteLine();
 
