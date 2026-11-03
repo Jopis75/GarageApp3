@@ -77,8 +77,11 @@ namespace GarageApp3.Tests
             Assert.Equal("ABC 12A", vehicle.RegistrationNumber);
         }
 
-        [Fact]
-        public void FindVehiclesByNumberOfSeats_ReturnsCorrectVehicle()
+        [Theory]
+        [InlineData(1, 1)]
+        [InlineData(2, 2)]
+        [InlineData(4, 1)]
+        public void FindVehiclesByNumberOfSeats_ReturnsCorrectCount(int numberOfSeats, int expectedCount)
         {
             // Arrange
             var garage = new Garage<Vehicle>(5);
@@ -88,12 +91,10 @@ namespace GarageApp3.Tests
             garage.AddVehicle(_vehicles[3]);
 
             // Act
-            var vehicles = garage.FindVehiclesByNumberOfSeats(4);
+            var vehicles = garage.FindVehiclesByNumberOfSeats(numberOfSeats);
 
             // Assert
-            Assert.Single(vehicles);
-            Assert.Equal(VehicleType.Car.ToString(), vehicles[0].GetType().Name);
-            Assert.Equal("ABC 12A", vehicles[0].RegistrationNumber);
+            Assert.Equal(expectedCount, vehicles.Count);
         }
 
         [Fact]

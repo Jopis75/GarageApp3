@@ -42,7 +42,7 @@ namespace GarageApp3.GarageLibrary.IO
 
             if (float.TryParse(fields[7], out var maxTrust) == false)
             {
-                throw new ArgumentException("Invalid maximum trust value in CSV line when parsing Airplane.", nameof(maxTrust));
+                throw new ArgumentException("Invalid maximum trust value in CSV line when parsing Airplane.");
             }
 
             return new Airplane(vehicleData.RegistrationNumber, vehicleData.Length, vehicleData.NumberOfSeats, motorVehicleData.NumberOfEngines, motorVehicleData.CylinderVolume, motorVehicleData.FuelType, maxTrust);
@@ -66,7 +66,7 @@ namespace GarageApp3.GarageLibrary.IO
 
             if (int.TryParse(fields[4], out var numberOfGears) == false || !(numberOfGears > 0))
             {
-                throw new ArgumentException("Invalid number of gears value in CSV line when parsing Bicycle.", nameof(numberOfGears));
+                throw new ArgumentException("Invalid number of gears value in CSV line when parsing Bicycle.");
             }
 
             return new Bicycle(vehicleData.RegistrationNumber, vehicleData.Length, vehicleData.NumberOfSeats, numberOfGears);
@@ -92,7 +92,7 @@ namespace GarageApp3.GarageLibrary.IO
 
             if (float.TryParse(fields[7], out var draft) == false)
             {
-                throw new ArgumentException("Invalid draft value in CSV line when parsing Boat.", nameof(draft));
+                throw new ArgumentException("Invalid draft value in CSV line when parsing Boat.");
             }
 
             return new Boat(vehicleData.RegistrationNumber, vehicleData.Length, vehicleData.NumberOfSeats, motorVehicleData.NumberOfEngines, motorVehicleData.CylinderVolume, motorVehicleData.FuelType, draft);
@@ -118,7 +118,7 @@ namespace GarageApp3.GarageLibrary.IO
 
             if (int.TryParse(fields[7], out var numberOfPassengerSeats) == false)
             {
-                throw new ArgumentException("Invalid number of passenger seats value in CSV line when parsing Bus.", nameof(numberOfPassengerSeats));
+                throw new ArgumentException("Invalid number of passenger seats value in CSV line when parsing Bus.");
             }
 
             return new Bus(vehicleData.RegistrationNumber, vehicleData.Length, vehicleData.NumberOfSeats, motorVehicleData.NumberOfEngines, motorVehicleData.CylinderVolume, motorVehicleData.FuelType, numberOfPassengerSeats);
@@ -144,7 +144,7 @@ namespace GarageApp3.GarageLibrary.IO
 
             if (float.TryParse(fields[7], out var maxTrailerWeight) == false)
             {
-                throw new ArgumentException("Invalid maximum trailer weight value in CSV line when parsing Car.", nameof(maxTrailerWeight));
+                throw new ArgumentException("Invalid maximum trailer weight value in CSV line when parsing Car.");
             }
 
             return new Car(vehicleData.RegistrationNumber, vehicleData.Length, vehicleData.NumberOfSeats, motorVehicleData.NumberOfEngines, motorVehicleData.CylinderVolume, motorVehicleData.FuelType, maxTrailerWeight);
@@ -192,7 +192,7 @@ namespace GarageApp3.GarageLibrary.IO
 
             if (float.TryParse(fields[7], out var seatHeight) == false)
             {
-                throw new ArgumentException("Invalid seat height value in CSV line when parsing Motorcycle.", nameof(seatHeight));
+                throw new ArgumentException("Invalid seat height value in CSV line when parsing Motorcycle.");
             }
 
             return new Motorcycle(vehicleData.RegistrationNumber, vehicleData.Length, vehicleData.NumberOfSeats, motorVehicleData.NumberOfEngines, motorVehicleData.CylinderVolume, motorVehicleData.FuelType, seatHeight);
@@ -202,12 +202,12 @@ namespace GarageApp3.GarageLibrary.IO
         {
             if (int.TryParse(fields[4], out var numberOfEngines) == false)
             {
-                throw new ArgumentException($"Invalid number of engines value in CSV line when parsing {vehicleType}.", nameof(numberOfEngines));
+                throw new ArgumentException($"Invalid number of engines value in CSV line when parsing {vehicleType}.");
             }
 
             if (float.TryParse(fields[5], out var cylinderVolume) == false)
             {
-                throw new ArgumentException($"Invalid cylinder volume value in CSV line when parsing {vehicleType}.", nameof(cylinderVolume));
+                throw new ArgumentException($"Invalid cylinder volume value in CSV line when parsing {vehicleType}.");
             }
 
             if (Enum.TryParse<FuelType>(fields[6], out var fuelType) == false)
@@ -238,7 +238,7 @@ namespace GarageApp3.GarageLibrary.IO
 
             if (float.TryParse(fields[7], out var maxLoad) == false)
             {
-                throw new ArgumentException("Invalid maximum load value in CSV line when parsing Truck.", nameof(maxLoad));
+                throw new ArgumentException("Invalid maximum load value in CSV line when parsing Truck.");
             }
 
             return new Truck(vehicleData.RegistrationNumber, vehicleData.Length, vehicleData.NumberOfSeats, motorVehicleData.NumberOfEngines, motorVehicleData.CylinderVolume, motorVehicleData.FuelType, maxLoad);
@@ -250,19 +250,19 @@ namespace GarageApp3.GarageLibrary.IO
 
             if (RegistrationNumberValidator.Validate(fields[1]) == false)
             {
-                throw new ArgumentException($"Invalid registration number in CSV line when parsing {vehicleType}.", nameof(registrationNumber));
+                throw new ArgumentException($"Invalid registration number in CSV line when parsing {vehicleType}.");
             }
 
             registrationNumber = fields[1];
 
             if (float.TryParse(fields[2], out var length) == false)
             {
-                throw new ArgumentException($"Invalid length value in CSV line when parsing {vehicleType}.", nameof(length));
+                throw new ArgumentException($"Invalid length value in CSV line when parsing {vehicleType}.");
             }
 
             if (int.TryParse(fields[3], out var numberOfSeats) == false)
             {
-                throw new ArgumentException($"Invalid number of seats value in CSV line when parsing {vehicleType}.", nameof(numberOfSeats));
+                throw new ArgumentException($"Invalid number of seats value in CSV line when parsing {vehicleType}.");
             }
 
             return new VehicleDto(registrationNumber, length, numberOfSeats);
