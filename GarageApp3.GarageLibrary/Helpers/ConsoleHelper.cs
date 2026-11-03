@@ -21,6 +21,13 @@ namespace GarageApp3.GarageLibrary.Helpers
                         return new CreateTextFileDto(null, null);
                     }
 
+                    var directoryName = Path.GetDirectoryName(path);
+
+                    if (!Directory.Exists(directoryName))
+                    {
+                        throw new DirectoryNotFoundException($"Could not find the directory '{directoryName}'.");
+                    }
+
                     if (Path.Exists(path))
                     {
                         Console.WriteLine();
@@ -40,9 +47,16 @@ namespace GarageApp3.GarageLibrary.Helpers
 
                     return new CreateTextFileDto(path, streamWriter);
                 }
+                catch (DirectoryNotFoundException ex)
+                {
+                    WriteErrorLine(ex.Message);
+                }
+                catch (UnauthorizedAccessException ex)
+                {
+                    WriteErrorLine(ex.Message);
+                }
                 catch (IOException ex)
                 {
-                    Console.WriteLine();
                     WriteErrorLine(ex.Message);
                 }
             }
@@ -79,12 +93,12 @@ namespace GarageApp3.GarageLibrary.Helpers
 
                     var directoryName = Path.GetDirectoryName(path);
 
-                    if (Directory.Exists(directoryName) == false)
+                    if (!Directory.Exists(directoryName))
                     {
                         throw new DirectoryNotFoundException($"Could not find the directory '{directoryName}'.");
                     }
 
-                    if (Path.Exists(path) == false)
+                    if (!Path.Exists(path))
                     {
                         throw new FileNotFoundException($"Could not find the file '{path}'.");
                     }
