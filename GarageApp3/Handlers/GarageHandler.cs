@@ -20,7 +20,7 @@ namespace GarageApp3.Handlers
             {
                 Console.Clear();
 
-                WriteGarageAppHeader();
+                WritePageHeader();
 
                 Console.WriteLine();
                 Console.WriteLine("What type of vehicle do you want to add?");
@@ -77,7 +77,7 @@ namespace GarageApp3.Handlers
             {
                 Console.Clear();
 
-                WriteGarageAppHeader();
+                WritePageHeader();
 
                 Console.WriteLine();
                 Console.WriteLine("How do you want to find the vehicle(s)?");
@@ -122,7 +122,7 @@ namespace GarageApp3.Handlers
             {
                 Console.Clear();
 
-                WriteGarageAppHeader();
+                WritePageHeader();
 
                 Console.WriteLine();
                 Console.WriteLine("What do you want to do?");
@@ -130,12 +130,13 @@ namespace GarageApp3.Handlers
 
                 Console.WriteLine("1. Add a vehicle to the garage.");
                 Console.WriteLine("2. Remove a vehicle from the garage.");
-                Console.WriteLine("3. Find vehicle(s) in the garage.");
-                Console.WriteLine("4. List all vehicles in the garage.");
-                Console.WriteLine("5. List all vehicle types in the garage.");
-                Console.WriteLine("6. Read vehicles from a file.");
-                Console.WriteLine("7. Write vehicles to a file.");
-                Console.WriteLine("8. Quit.");
+                Console.WriteLine("3. Remove all vehicles from the garage.");
+                Console.WriteLine("4. Find vehicles in the garage.");
+                Console.WriteLine("5. List all vehicles in the garage.");
+                Console.WriteLine("6. List all vehicle types in the garage.");
+                Console.WriteLine("7. Read vehicles from a file.");
+                Console.WriteLine("8. Write vehicles to a file.");
+                Console.WriteLine("9. Quit.");
                 Console.WriteLine();
                 Console.Write("Enter your selection: ");
 
@@ -150,21 +151,24 @@ namespace GarageApp3.Handlers
                         RemoveVehicle();
                         break;
                     case "3":
-                        FindVehicles();
+                        RemoveAllVehicles();
                         break;
                     case "4":
-                        ListVehicles();
+                        FindVehicles();
                         break;
                     case "5":
-                        ListVehicleTypes();
+                        ListVehicles();
                         break;
                     case "6":
-                        ReadVehicles();
+                        ListVehicleTypes();
                         break;
                     case "7":
-                        WriteVehicles();
+                        ReadVehicles();
                         break;
                     case "8":
+                        WriteVehicles();
+                        break;
+                    case "9":
                         ExitGarage();
                         quit = true;
                         break;
@@ -188,7 +192,7 @@ namespace GarageApp3.Handlers
         {
             Console.Clear();
 
-            WriteGarageAppHeader();
+            WritePageHeader();
 
             Console.WriteLine();
 
@@ -245,13 +249,9 @@ namespace GarageApp3.Handlers
             {
                 Console.Clear();
 
-                WriteGarageAppHeader();
+                WritePageHeader();
 
-                Console.WriteLine();
-                Console.WriteLine("-----------------------------");
-                Console.WriteLine("   List vehicles in garage   ");
-                Console.WriteLine("-----------------------------");
-                Console.WriteLine();
+                WritePageTitle("   List vehicles in garage   ");
 
                 ConsoleHelper.WriteInfoLine($"Found {garage.NumberOfVehicles}" + (garage.NumberOfVehicles > 1 ? " vehicles" : " vehicle") + " in the garage.");
                 Console.WriteLine();
@@ -273,13 +273,9 @@ namespace GarageApp3.Handlers
             {
                 Console.Clear();
 
-                WriteGarageAppHeader();
+                WritePageHeader();
 
-                Console.WriteLine();
-                Console.WriteLine("----------------------------------");
-                Console.WriteLine("   List vehicle types in garage   ");
-                Console.WriteLine("----------------------------------");
-                Console.WriteLine();
+                WritePageTitle("   List vehicle types in garage   ");
 
                 garage.WriteVehicleTypes(Console.Out);
                 Console.WriteLine();
@@ -292,13 +288,9 @@ namespace GarageApp3.Handlers
         {
             Console.Clear();
 
-            WriteGarageAppHeader();
+            WritePageHeader();
 
-            Console.WriteLine();
-            Console.WriteLine("-----------------------------");
-            Console.WriteLine("   Read vehicles from file   ");
-            Console.WriteLine("-----------------------------");
-            Console.WriteLine();
+            WritePageTitle("   Read vehicles from file   ");
 
             // Read the file path from the console.
             var path = ConsoleHelper.ReadFilePath("Enter the file path (blank to exit): ");
@@ -385,6 +377,35 @@ namespace GarageApp3.Handlers
             }
         }
 
+        public void RemoveAllVehicles()
+        {
+            if (garage.IsEmpty)
+            {
+                WriteGarageIsEmptyPage("   Remove all vehicles from garage   ");
+            }
+            else
+            {
+                Console.Clear();
+
+                WritePageHeader();
+
+                WritePageTitle("   Remove all vehicles from garage   ");
+
+                var removeAll = ConsoleHelper.ReadYesNo("Are you sure you want to remove all vehicles from the garage ('y', 'n')? ");
+
+                if (removeAll)
+                {
+                    garage.RemoveAllVehicles();
+
+                    Console.WriteLine();
+                    ConsoleHelper.WriteSuccessLine("All vehicles have been removed from the garage.");
+
+                    Console.WriteLine();
+                    WritePressAnyKeyToContinue();
+                }
+            }
+        }
+
         public void RemoveVehicle()
         {
             while (true)
@@ -398,13 +419,9 @@ namespace GarageApp3.Handlers
                 {
                     Console.Clear();
 
-                    WriteGarageAppHeader();
+                    WritePageHeader();
 
-                    Console.WriteLine();
-                    Console.WriteLine("--------------------------------");
-                    Console.WriteLine("   Remove vehicle from garage   ");
-                    Console.WriteLine("--------------------------------");
-                    Console.WriteLine();
+                    WritePageTitle("   Remove vehicle from garage   ");
 
                     // Read the registration number from the console and attempt to remove the vehicle from the garage.
                     var registrationNumber = ConsoleHelper.ReadRegistrationNumber("Enter the registration number: ");
@@ -441,13 +458,9 @@ namespace GarageApp3.Handlers
         {
             Console.Clear();
 
-            WriteGarageAppHeader();
+            WritePageHeader();
 
-            Console.WriteLine();
-            Console.WriteLine("----------------------------");
-            Console.WriteLine("   Write vehicles to file   ");
-            Console.WriteLine("----------------------------");
-            Console.WriteLine();
+            WritePageTitle("   Write vehicles to file   ");
 
             // Read the file path from the console.
             var createTextFileDto = ConsoleHelper.ReadCreateTextFile("Enter the file path (blank to exit): ");
@@ -495,7 +508,7 @@ namespace GarageApp3.Handlers
                 {
                     Console.Clear();
 
-                    WriteGarageAppHeader();
+                    WritePageHeader();
 
                     Console.WriteLine();
                     Console.WriteLine(dashLine);
@@ -547,7 +560,7 @@ namespace GarageApp3.Handlers
                 {
                     Console.Clear();
 
-                    WriteGarageAppHeader();
+                    WritePageHeader();
 
                     Console.WriteLine();
                     Console.WriteLine("----------------------------------------");
@@ -602,7 +615,7 @@ namespace GarageApp3.Handlers
                 {
                     Console.Clear();
 
-                    WriteGarageAppHeader();
+                    WritePageHeader();
 
                     Console.WriteLine();
                     Console.WriteLine("-----------------------------------------");
@@ -653,7 +666,7 @@ namespace GarageApp3.Handlers
                 {
                     Console.Clear();
 
-                    WriteGarageAppHeader();
+                    WritePageHeader();
 
                     Console.WriteLine();
                     Console.WriteLine("-------------------------------------");
@@ -708,7 +721,7 @@ namespace GarageApp3.Handlers
                 {
                     Console.Clear();
 
-                    WriteGarageAppHeader();
+                    WritePageHeader();
 
                     Console.WriteLine();
                     Console.WriteLine("---------------------------------------------------");
@@ -868,22 +881,13 @@ namespace GarageApp3.Handlers
             return new VehicleDto(registrationNumber, length, numberOfSeats);
         }
 
-        private void WriteGarageAppHeader()
-        {
-            Console.WriteLine(" ▄██████ ██████▄  ██████▄  ██████▄   ▄██████  ▄██████      ██████▄  ██████▄  ██████▄       ██████▄ \r\n▒▒▒  ▀▀▀ ▄▄▄  ▒▒▒ ▄▄▄  ▒▒▀ ▄▄▄  ▒▒▒ ▒▒▒  ▀▀▀ ▒▒▒  ▀▀▀      ▄▄▄  ▒▒▒ ▄▄▄  ▒▒▒ ▄▄▄  ▒▒▒      ▀▀▀  ▒▒▒\r\n███ ████ ████████ ██████▄  ████████ ███ ████ █████▀        ████████ ██████▀  ██████▀         ▀█████\r\n▒▒▒  ▒▒▒ ▒▒▒  ▒▒▒ ▒▒▒  ▒▒▒ ▒▒▒  ▒▒▒ ▒▒▒  ▒▒▒ ▒▒▒  ▄▄▄      ▒▒▒  ▒▒▒ ▒▒▒      ▒▒▒           ▄▄▄  ▒▒▒\r\n ▀██████ ███  ███ ███  ███ ███  ███  ▀██████  ▀██████      ███  ███ ███      ███           ██████▀ ");
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine();
-            ConsoleHelper.WriteInfoLine(garage.StatusString());
-        }
-
         private void WriteGarageIsEmptyPage(string title)
         {
             var dashLine = new string('-', title.Length);
 
             Console.Clear();
 
-            WriteGarageAppHeader();
+            WritePageHeader();
 
             Console.WriteLine();
             Console.WriteLine(dashLine);
@@ -903,7 +907,7 @@ namespace GarageApp3.Handlers
 
             Console.Clear();
 
-            WriteGarageAppHeader();
+            WritePageHeader();
 
             Console.WriteLine();
             Console.WriteLine(dashLine);
@@ -915,6 +919,26 @@ namespace GarageApp3.Handlers
             Console.WriteLine();
 
             WritePressAnyKeyToContinue();
+        }
+
+        private void WritePageHeader()
+        {
+            Console.WriteLine(" ▄██████ ██████▄  ██████▄  ██████▄   ▄██████  ▄██████      ██████▄  ██████▄  ██████▄       ██████▄ \r\n▒▒▒  ▀▀▀ ▄▄▄  ▒▒▒ ▄▄▄  ▒▒▀ ▄▄▄  ▒▒▒ ▒▒▒  ▀▀▀ ▒▒▒  ▀▀▀      ▄▄▄  ▒▒▒ ▄▄▄  ▒▒▒ ▄▄▄  ▒▒▒      ▀▀▀  ▒▒▒\r\n███ ████ ████████ ██████▄  ████████ ███ ████ █████▀        ████████ ██████▀  ██████▀         ▀█████\r\n▒▒▒  ▒▒▒ ▒▒▒  ▒▒▒ ▒▒▒  ▒▒▒ ▒▒▒  ▒▒▒ ▒▒▒  ▒▒▒ ▒▒▒  ▄▄▄      ▒▒▒  ▒▒▒ ▒▒▒      ▒▒▒           ▄▄▄  ▒▒▒\r\n ▀██████ ███  ███ ███  ███ ███  ███  ▀██████  ▀██████      ███  ███ ███      ███           ██████▀ ");
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+            ConsoleHelper.WriteInfoLine(garage.StatusString());
+        }
+
+        private static void WritePageTitle(string title)
+        {
+            var dashLine = new string('-', title.Length);
+           
+            Console.WriteLine();
+            Console.WriteLine(dashLine);
+            Console.WriteLine(title);
+            Console.WriteLine(dashLine);
+            Console.WriteLine();
         }
 
         private static void WritePressAnyKeyToContinue()

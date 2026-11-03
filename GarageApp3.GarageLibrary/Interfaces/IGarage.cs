@@ -28,7 +28,7 @@ namespace GarageApp3.GarageLibrary.Interfaces
 
         string StatusString();
 
-        IList<TVehicle> RemoveAll();
+        IList<TVehicle> RemoveAllVehicles();
 
         TVehicle RemoveVehicleByRegistrationNumber(string registrationNumber);
 

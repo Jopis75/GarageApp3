@@ -146,7 +146,7 @@ namespace GarageApp3.Tests
             garage.AddVehicle(_vehicles[3]);
 
             // Act
-            var vehicles = garage.RemoveAll();
+            var vehicles = garage.RemoveAllVehicles();
 
             // Assert
             Assert.Equal(0, garage.NumberOfVehicles);

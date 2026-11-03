@@ -21,6 +21,8 @@ namespace GarageApp3.Interfaces
 
         void ReadVehicles();
 
+        void RemoveAllVehicles();
+
         void RemoveVehicle();
 
         void WriteVehicles();

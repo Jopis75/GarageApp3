@@ -112,8 +112,13 @@ namespace GarageApp3.GarageLibrary.Garages
             return statusString;
         }
 
-        public IList<TVehicle> RemoveAll()
+        public IList<TVehicle> RemoveAllVehicles()
         {
+            if (IsEmpty)
+            {
+                throw new InvalidOperationException("The garage is empty.");
+            }
+
             var vehilces = _vehicles.ToList();
 
             _vehicles.RemoveAll(_ => true);
