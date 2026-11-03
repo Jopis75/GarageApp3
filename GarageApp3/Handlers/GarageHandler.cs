@@ -1,19 +1,17 @@
 ﻿using GarageApp3.GarageLibrary.Dtos;
 using GarageApp3.GarageLibrary.Enums;
 using GarageApp3.GarageLibrary.Exceptions;
-using GarageApp3.GarageLibrary.Garages;
 using GarageApp3.GarageLibrary.Helpers;
+using GarageApp3.GarageLibrary.Interfaces;
 using GarageApp3.GarageLibrary.IO;
 using GarageApp3.GarageLibrary.Vehicles;
 using GarageApp3.Interfaces;
 
 namespace GarageApp3.Handlers
 {
-    public class GarageHandler<TVehicle>(int numberOfParkingSpaces) : IGarageHandler<TVehicle>
+    public class GarageHandler<TVehicle>(IGarage<TVehicle> garage) : IGarageHandler<TVehicle>
         where TVehicle : Vehicle
     {
-        private readonly Garage<TVehicle> _garage = new(numberOfParkingSpaces);
-
         public void AddVehicle()
         {
             var exit = false;
@@ -202,18 +200,18 @@ namespace GarageApp3.Handlers
                 var vehiclesCount = 0;
 
                 // Limit the number of vehicles to add to the garage based on the number of parking spaces available and the number of vehicles in the list.
-                var count = Math.Min(_garage.NumberOfParkingSpaces, vehicles.Count);
+                var count = Math.Min(garage.NumberOfParkingSpaces, vehicles.Count);
 
                 foreach (var vehicle in vehicles.Take(count))
                 {
-                    if (_garage.VehicleExists(vehicle.RegistrationNumber))
+                    if (garage.VehicleExists(vehicle.RegistrationNumber))
                     {
                         Console.WriteLine();
                         ConsoleHelper.WriteErrorLine($"The registration number '{vehicle.RegistrationNumber}' already exists.");
                     }
                     else
                     {
-                        _garage.AddVehicle(vehicle);
+                        garage.AddVehicle(vehicle);
 
                         vehiclesCount++;
 
@@ -239,7 +237,7 @@ namespace GarageApp3.Handlers
 
         public void ListVehicles()
         {
-            if (_garage.IsEmpty)
+            if (garage.IsEmpty)
             {
                 WriteGarageIsEmptyPage("   List vehicles in garage   ");
             }
@@ -255,7 +253,7 @@ namespace GarageApp3.Handlers
                 Console.WriteLine("-----------------------------");
                 Console.WriteLine();
 
-                _garage.WriteVehicles(Console.Out);
+                garage.WriteVehicles(Console.Out);
                 Console.WriteLine();
 
                 WritePressAnyKeyToContinue();
@@ -264,7 +262,7 @@ namespace GarageApp3.Handlers
 
         public void ListVehicleTypes()
         {
-            if (_garage.IsEmpty)
+            if (garage.IsEmpty)
             {
                 WriteGarageIsEmptyPage("   List vehicle types in garage   ");
             }
@@ -280,7 +278,7 @@ namespace GarageApp3.Handlers
                 Console.WriteLine("----------------------------------");
                 Console.WriteLine();
 
-                _garage.WriteVehicleTypes(Console.Out);
+                garage.WriteVehicleTypes(Console.Out);
                 Console.WriteLine();
 
                 WritePressAnyKeyToContinue();
@@ -336,21 +334,21 @@ namespace GarageApp3.Handlers
 
                         foreach (var vehicle in vehicles)
                         {
-                            if (_garage.VehicleExists(vehicle.RegistrationNumber))
+                            if (garage.VehicleExists(vehicle.RegistrationNumber))
                             {
                                 Console.WriteLine();
                                 ConsoleHelper.WriteErrorLine($"The registration number '{vehicle.RegistrationNumber}' already exists.");
                             }
                             else
                             {
-                                _garage.AddVehicle((TVehicle)vehicle);
+                                garage.AddVehicle((TVehicle)vehicle);
 
                                 vehiclesCount++;
 
                                 Console.WriteLine();
                                 ConsoleHelper.WriteSuccessLine($"The vehicle with registrationnumber {vehicle.RegistrationNumber} was added successfully.");
 
-                                if (_garage.IsFull)
+                                if (garage.IsFull)
                                 {
                                     Console.WriteLine();
                                     ConsoleHelper.WriteInfoLine("The garage is full.");
@@ -380,7 +378,7 @@ namespace GarageApp3.Handlers
         {
             while (true)
             {
-                if (_garage.IsEmpty)
+                if (garage.IsEmpty)
                 {
                     WriteGarageIsEmptyPage("   Remove vehicle from garage   ");
                     break;
@@ -405,10 +403,10 @@ namespace GarageApp3.Handlers
                     try
                     {
                         // Remove the vehicle from the garage by the specified registration number and display a success message.
-                        vehicle = _garage.RemoveVehicleByRegistrationNumber(registrationNumber);
+                        vehicle = garage.RemoveVehicleByRegistrationNumber(registrationNumber);
 
                         Console.WriteLine();
-                        ConsoleHelper.WriteSuccessLine($"The vehicle with registration number '{registrationNumber}' was removed successfully.");
+                        ConsoleHelper.WriteSuccessLine($"The vehicle with registration number '{registrationNumber}' has been removed from the garage.");
                     }
                     catch (VehicleNotFoundException ex)
                     {
@@ -450,7 +448,7 @@ namespace GarageApp3.Handlers
                     Console.WriteLine();
 
                     // Write the vehicles in the garage to the specified CSV file.
-                    var vehiclesCount = GarageCsvStreamWriter<TVehicle>.Write(createTextFileDto.StreamWriter, _garage);
+                    var vehiclesCount = GarageCsvStreamWriter<TVehicle>.Write(createTextFileDto.StreamWriter, garage);
 
                     if (vehiclesCount > 0)
                     {
@@ -477,7 +475,7 @@ namespace GarageApp3.Handlers
 
             while (true)
             {
-                if (_garage.IsFull)
+                if (garage.IsFull)
                 {
                     WriteGarageIsFullPage(title);
                     break;
@@ -500,10 +498,10 @@ namespace GarageApp3.Handlers
                     try
                     {
                         // Add the vehicle to the garage and display a success message.
-                        _garage.AddVehicle((TVehicle)vehicle!);
+                        garage.AddVehicle((TVehicle)vehicle!);
 
                         Console.WriteLine();
-                        ConsoleHelper.WriteSuccessLine($"The vehicle with registrationnumber '{vehicle.RegistrationNumber}' was added successfully.");
+                        ConsoleHelper.WriteSuccessLine($"The vehicle with registrationnumber '{vehicle.RegistrationNumber}' has been added to the garage.");
                         Console.WriteLine();
                     }
                     catch (InvalidOperationException ex)
@@ -528,7 +526,7 @@ namespace GarageApp3.Handlers
 
         private void FindVehiclesByNumberOfSeats()
         {
-            if (_garage.IsEmpty)
+            if (garage.IsEmpty)
             {
                 WriteGarageIsEmptyPage("   Find vehicle(s) by number of seats   ");
             }
@@ -550,7 +548,7 @@ namespace GarageApp3.Handlers
                     var numberOfSeats = ConsoleHelper.ReadInt("Enter the number of seats (> 0): ", value => value < 1 || value > int.MaxValue);
 
                     // Find vehicles in the garage by the specified number of seats and display the results.
-                    var vehicles = _garage.FindVehiclesByNumberOfSeats(numberOfSeats);
+                    var vehicles = garage.FindVehiclesByNumberOfSeats(numberOfSeats);
 
                     Console.WriteLine();
 
@@ -583,7 +581,7 @@ namespace GarageApp3.Handlers
 
         private void FindVehicleByRegistrationNumber()
         {
-            if (_garage.IsEmpty)
+            if (garage.IsEmpty)
             {
                 WriteGarageIsEmptyPage("   Find vehicle by registration number   ");
             }
@@ -607,7 +605,7 @@ namespace GarageApp3.Handlers
                     try
                     {
                         // Find the vehicle in the garage by the specified registration number and display the result.
-                        var vehicle = _garage.FindVehicleByRegistrationNumber(registrationNumber);
+                        var vehicle = garage.FindVehicleByRegistrationNumber(registrationNumber);
 
                         Console.WriteLine();
                         ConsoleHelper.WriteInfoLine($"Found vehicle with registration number '{registrationNumber}'.");
@@ -634,7 +632,7 @@ namespace GarageApp3.Handlers
 
         private void FindVehiclesByVehicleType()
         {
-            if (_garage.IsEmpty)
+            if (garage.IsEmpty)
             {
                 WriteGarageIsEmptyPage("   Find vehicle(s) by vehicle type   ");
             }
@@ -656,7 +654,7 @@ namespace GarageApp3.Handlers
                     var vehicleType = ConsoleHelper.ReadEnum<VehicleType>("Enter the vehicle type ('Bicycle', 'Motorcycle', 'Car', 'Truck', 'Bus', 'Boat', 'Airplane'): ");
 
                     // Find vehicles in the garage by the specified vehicle type and display the results.
-                    var vehicles = _garage.FindVehiclesByVehicleType(vehicleType);
+                    var vehicles = garage.FindVehiclesByVehicleType(vehicleType);
 
                     Console.WriteLine();
 
@@ -689,7 +687,7 @@ namespace GarageApp3.Handlers
 
         private void FindVehiclesByVehicleTypeAndFuelType()
         {
-            if (_garage.IsEmpty)
+            if (garage.IsEmpty)
             {
                 WriteGarageIsEmptyPage("   Find vehicle(s) by vehicle type and fuel type   ");
             }
@@ -712,7 +710,7 @@ namespace GarageApp3.Handlers
                     var fuelType = ConsoleHelper.ReadEnum<FuelType>("Enter the fuel type ('Gasoline', 'Diesel'): ");
 
                     // Find vehicles in the garage by the specified vehicle type and fuel type and display the results.
-                    var vehicles = _garage.FindVehiclesByVehicleTypeAndFuelType(vehicleType, fuelType);
+                    var vehicles = garage.FindVehiclesByVehicleTypeAndFuelType(vehicleType, fuelType);
 
                     Console.WriteLine();
 
@@ -841,7 +839,7 @@ namespace GarageApp3.Handlers
             {
                 registrationNumber = ConsoleHelper.ReadRegistrationNumber("Enter the registration number: ");
 
-                if (_garage.VehicleExists(registrationNumber))
+                if (garage.VehicleExists(registrationNumber))
                 {
                     Console.WriteLine();
                     ConsoleHelper.WriteErrorLine($"The registration number '{registrationNumber}' already exists.");
@@ -865,7 +863,7 @@ namespace GarageApp3.Handlers
             Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine();
-            ConsoleHelper.WriteInfoLine(_garage.StatusString());
+            ConsoleHelper.WriteInfoLine(garage.StatusString());
         }
 
         private void WriteGarageIsEmptyPage(string title)

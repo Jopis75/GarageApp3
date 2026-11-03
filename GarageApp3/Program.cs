@@ -1,4 +1,5 @@
-﻿using GarageApp3.GarageLibrary.Helpers;
+﻿using GarageApp3.GarageLibrary.Garages;
+using GarageApp3.GarageLibrary.Helpers;
 using GarageApp3.GarageLibrary.IO;
 using GarageApp3.GarageLibrary.Vehicles;
 using GarageApp3.Handlers;
@@ -13,7 +14,7 @@ try
     // Read the sample vehicles from the CSV file.
     var sampleVehicles = GarageCsvStreamReader.Read(csvFilePath!);
 
-    var garageHandler = new GarageHandler<Vehicle>(numberOfParkingSpaces);
+    var garageHandler = new GarageHandler<Vehicle>(new Garage<Vehicle>(numberOfParkingSpaces));
 
     // Initialize the garage handler with the sample vehicles and enter the garage.
     garageHandler.InitGarage(sampleVehicles);
