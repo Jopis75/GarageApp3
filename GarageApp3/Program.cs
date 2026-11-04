@@ -28,6 +28,25 @@ catch (ArgumentException ex)
     Console.Write("Press any key to continue...");
     Console.ReadKey();
 }
+catch (FileNotFoundException ex)
+{
+    Console.WriteLine();
+    ConsoleHelper.WriteErrorLine(ex.Message);
+    Console.WriteLine("Please ensure that the sample vehicles CSV file exists and that the file path is correct in the App.config file.");
+    Console.WriteLine();
+    Console.Write("Press any key to continue...");
+    Console.ReadKey();
+}
+catch (DirectoryNotFoundException ex)
+{
+    Console.WriteLine();
+    ConsoleHelper.WriteErrorLine(ex.Message);
+    Console.WriteLine("Please ensure that the directory for the sample vehicles CSV file exists and that the file path is correct in the App.config file.");
+    Console.WriteLine();
+    Console.Write("Press any key to continue...");
+    Console.ReadKey();
+
+}
 catch (IOException ex)
 {
     Console.WriteLine();
