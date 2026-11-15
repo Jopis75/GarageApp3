@@ -6,6 +6,7 @@ using GarageApp3.GarageLibrary.Interfaces;
 using GarageApp3.GarageLibrary.IO;
 using GarageApp3.GarageLibrary.Vehicles;
 using GarageApp3.Interfaces;
+using System.Configuration;
 
 namespace GarageApp3.Handlers
 {
@@ -196,7 +197,11 @@ namespace GarageApp3.Handlers
 
             Console.WriteLine();
 
-            // Ask the user if they want to add sample vehicles to the garage and add them if they choose to do so.
+            var csvFilePath = ConfigurationManager.AppSettings.Get("SampleVehiclesCsvFilePath");
+            Console.WriteLine($"The sample vehicles are read from " + (string.IsNullOrWhiteSpace(csvFilePath) ? "RAM" : csvFilePath) + ".");
+            Console.WriteLine("If you want to add sample vehicles from a CSV file, specify the file path in the 'SampleVehiclesCsvFilePath' setting in the App.config file.");
+            Console.WriteLine("Or if you want to add sample vehicles from RAM, specify an empty value in the 'SampleVehiclesCsvFilePath' setting in the App.config file.");
+            Console.WriteLine();
             var addVehicles = ConsoleHelper.ReadYesNo("Do you want to add sample vehicles to the garage ('y', 'n')? ");
 
             if (addVehicles)
