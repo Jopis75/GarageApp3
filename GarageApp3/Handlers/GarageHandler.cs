@@ -202,7 +202,7 @@ namespace GarageApp3.Handlers
             Console.WriteLine("If you want to add sample vehicles from a CSV file, specify the file path in the 'SampleVehiclesCsvFilePath' setting in the App.config file.");
             Console.WriteLine("Or if you want to add sample vehicles from RAM, specify an empty value in the 'SampleVehiclesCsvFilePath' setting in the App.config file.");
             Console.WriteLine();
-            var addVehicles = ConsoleHelper.ReadYesNo("Do you want to add sample vehicles to the garage ('y', 'n')? ");
+            var addVehicles = ConsoleHelper.ReadYesNo("Do you want to add the sample vehicles to the garage ('y', 'n')? ");
 
             if (addVehicles)
             {
