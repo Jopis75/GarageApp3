@@ -478,11 +478,11 @@ namespace GarageApp3.Handlers
 
                     if (vehiclesCount > 0)
                     {
-                        ConsoleHelper.WriteInfoLine($"{vehiclesCount}" + (vehiclesCount > 1 ? " vehicles" : " vehicle") + $" was written to the file {createTextFileDto.FilePath}.");
+                        ConsoleHelper.WriteInfoLine($"{vehiclesCount}" + (vehiclesCount > 1 ? " vehicles" : " vehicle") + $" has been written to the file {createTextFileDto.FilePath}.");
                     }
                     else
                     {
-                        ConsoleHelper.WriteInfoLine($"No vehicles was written to the file {createTextFileDto.FilePath}.");
+                        ConsoleHelper.WriteInfoLine($"No vehicles has been written to the file {createTextFileDto.FilePath}.");
                     }
 
                     createTextFileDto.StreamWriter.Dispose();

@@ -1,4 +1,5 @@
-﻿using GarageApp3.GarageLibrary.Garages;
+﻿using GarageApp3.GarageLibrary.Enums;
+using GarageApp3.GarageLibrary.Garages;
 using GarageApp3.GarageLibrary.Helpers;
 using GarageApp3.GarageLibrary.IO;
 using GarageApp3.GarageLibrary.Vehicles;
@@ -7,16 +8,12 @@ using System.Configuration;
 
 try
 {
-    // Get the sample vehicles CSV file path and number of parking spaces from the app.config file.
-    var csvFilePath = GetSampleVehiclesCsvFilePath();
+    // Get the number of parking spaces from the App.config file and create a GarageHandler instance.
     var numberOfParkingSpaces = GetNumberOfParkingSpaces();
-
-    // Read the sample vehicles from the CSV file.
-    var sampleVehicles = GarageCsvStreamReader.Read(csvFilePath!);
-
     var garageHandler = new GarageHandler<Vehicle>(new Garage<Vehicle>(numberOfParkingSpaces));
 
-    // Initialize the garage handler with the sample vehicles and enter the garage.
+    // Initialize the garage with sample vehicles and enter the garage.
+    var sampleVehicles = GetSampleVehicles();
     garageHandler.InitGarage(sampleVehicles);
     garageHandler.EnterGarage();
 }
@@ -64,18 +61,6 @@ catch (Exception ex)
     Console.ReadKey();
 }
 
-static string? GetSampleVehiclesCsvFilePath()
-{
-    var filePath = ConfigurationManager.AppSettings.Get("SampleVehiclesCsvFilePath");
-
-    if (string.IsNullOrWhiteSpace(filePath))
-    {
-        throw new ArgumentException("Invalid file path value. File path cannot be null or whitespace.", nameof(filePath));
-    }
-
-    return filePath;
-}
-
 static int GetNumberOfParkingSpaces()
 {
     var numberOfParkingSpacesString = ConfigurationManager.AppSettings.Get("NumberOfParkingSpaces");
@@ -87,4 +72,25 @@ static int GetNumberOfParkingSpaces()
     }
 
     return numberOfParkingSpaces;
+}
+
+static IList<Vehicle> GetSampleVehicles()
+{
+    var csvFilePath = ConfigurationManager.AppSettings.Get("SampleVehiclesCsvFilePath");
+
+    if (string.IsNullOrWhiteSpace(csvFilePath))
+    {
+        return
+        [
+            new Bicycle("XYZ 123", 1.8f, 1, 3),
+            new Motorcycle("HAC 26G", 2.1f, 2, 1, 6.0f, FuelType.Gasoline, 60.0f),
+            new Car("ABC 12A", 4.0f, 4, 1, 2.0f, FuelType.Gasoline, 750.0f),
+            new Truck("RTH 09T", 9.0f, 2, 1, 6.0f, FuelType.Diesel, 40000.0f)
+        ];
+    }
+
+    // Read the sample vehicles from the CSV file.
+    var sampleVehicles = GarageCsvStreamReader.Read(csvFilePath!);
+
+    return sampleVehicles;
 }
