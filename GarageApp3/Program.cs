@@ -78,7 +78,7 @@ static IList<Vehicle> GetSampleVehicles()
 {
     var csvFilePath = ConfigurationManager.AppSettings.Get("SampleVehiclesCsvFilePath");
 
-    if (string.IsNullOrWhiteSpace(csvFilePath))
+    if (string.IsNullOrEmpty(csvFilePath))
     {
         return
         [

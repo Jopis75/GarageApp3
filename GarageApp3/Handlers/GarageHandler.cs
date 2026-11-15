@@ -198,7 +198,7 @@ namespace GarageApp3.Handlers
             Console.WriteLine();
 
             var csvFilePath = ConfigurationManager.AppSettings.Get("SampleVehiclesCsvFilePath");
-            Console.WriteLine($"The sample vehicles are read from " + (string.IsNullOrWhiteSpace(csvFilePath) ? "RAM" : csvFilePath) + ".");
+            Console.WriteLine($"The sample vehicles are read from " + (string.IsNullOrEmpty(csvFilePath) ? "RAM" : csvFilePath) + ".");
             Console.WriteLine("If you want to add sample vehicles from a CSV file, specify the file path in the 'SampleVehiclesCsvFilePath' setting in the App.config file.");
             Console.WriteLine("Or if you want to add sample vehicles from RAM, specify an empty value in the 'SampleVehiclesCsvFilePath' setting in the App.config file.");
             Console.WriteLine();
